@@ -1,3 +1,4 @@
+// Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic-wand;
 
@@ -10,6 +11,7 @@
 // - Scriptable API Docs https://docs.scriptable.app/
 // =============================================================================================
 // TODO:
+// - Can I adjust font size?
 // - Add attachments from event object
 // - Add link back to calendar - is this possible with either the default iOS mail app or Fantastical?
 
@@ -162,13 +164,13 @@ function addTitleRow(uiTable, text) {
 function addRow(uiTable, dateText, eventText) {
     let uiTableRow = new UITableRow();
 
-    // The 15/85 split seems OK on the narrowest ipad split view
+    // The split seems OK on the narrowest ipad split view
     let cell1 = uiTableRow.addText(dateText);
-    cell1.widthWeight = 15;
+    cell1.widthWeight = 20;
     cell1.leftAligned();
 
     let cell2 = uiTableRow.addText(eventText);
-    cell2.widthWeight = 85;
+    cell2.widthWeight = 80;
     cell2.leftAligned();
 
     uiTableRow.height = 40;
