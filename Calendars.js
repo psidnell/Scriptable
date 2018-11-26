@@ -11,7 +11,7 @@
 // - Scriptable API Docs https://docs.scriptable.app/
 // =============================================================================================
 // TODO:
-// - Add attachments from event object
+// - Add attachments from event object (don't seem to ba available)
 
 // Number of days to show in the picker
 DAYS_TO_SHOW = 64;
@@ -66,6 +66,17 @@ function getProjectFromCalendar(realCalendarName) {
     return project != null ? project : DEFAULT_PROJECT;
 }
 
+// Extract the attendee names from the event
+function extractAttendees(event) {
+    let attendees = [];
+    let i;
+    for (i = 0; i < events.attendees; i++) {
+        let attendee = events.attendees[i];
+        attendees.push(attendee.name);
+    }
+    return attendees;
+}
+
 // Create an Omnifocus entry
 function createEntry(data) {
     let url = new CallbackURL('omnifocus:///add');
@@ -103,11 +114,9 @@ function handleSelectedEvent(event) {
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
     let location = event.location;
-    let note = [
-        'Calendar: ' + altCalendarName,
-        'Location:',
-        location
-    ].join('\n');
+    let note = 'Calendar: ' + altCalendarName;
+    note += '\n\nLocation:\n' + location.join('\n');
+    note += '\n\nAttendees:\n' + extractAttendees(event).join('\n');
 
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
