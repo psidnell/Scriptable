@@ -156,7 +156,7 @@ function handleSelectedEvent(event) {
 // Create a title row (bold text)
 function addTitleRow(uiTable, text) {
     let uiTableRow = new UITableRow();
-    let titleCell = uiTableRow.addText(text);
+    let titleCell = uiTableRow.addText(text.toUpperCase());
     titleCell.leftAligned();
     titleCell.widthWeight = 100;
     uiTableRow.height = 70;
