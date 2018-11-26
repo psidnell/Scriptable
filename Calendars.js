@@ -159,7 +159,7 @@ function addTitleRow(uiTable, text) {
     let titleCell = uiTableRow.addText(text);
     titleCell.leftAligned();
     titleCell.widthWeight = 100;
-    uiTableRow.height = 50;
+    uiTableRow.height = 70;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
     uiTableRow.isHeader = true;
