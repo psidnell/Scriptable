@@ -2,6 +2,8 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic-wand;
 
+// V1.0
+
 // =============================================================================================
 // A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
 // and creates OmniFocus events for those selected. Multi-day events get two OmniFocus events
