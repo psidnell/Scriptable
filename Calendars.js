@@ -78,10 +78,10 @@ function createEntry(data) {
     url.addParameter('flag', 'true');
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false'); // Ignored?, always opened in edit mode in OF
-    console.log('Openning ' + url.getURL());
     url.open();
 }
 
+// True if the event is a multi-day all day event
 function isAllDayAndMultiDay(event) {
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
@@ -89,8 +89,12 @@ function isAllDayAndMultiDay(event) {
     return event.isAllDay && !singleDay;
 }
 
+// True if the event is a multi-day all day event
 function isAllDayAndSingleDay(event) {
-    return event.isAllDay;
+    let start = formatOFDate(event.startDate);
+    let end = formatOFDate(event.endDate);
+    let singleDay = start === end;
+    return event.isAllDay && singleDay;
 }
 
 // Process an event that has been selected for addition to OmniFocus
