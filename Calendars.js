@@ -33,16 +33,18 @@ const CALENDAR_TITLE_MAP = {
 };
 
 // Whole bunch of little date formatting functions
-function getYear(d) {return d.getFullYear();}
-function getMonth(d) {return ("0" + (d.getMonth()+1)).slice(-2);}
-function getDate(d) {return ("0" + d.getDate()).slice(-2);}
-function getHHMM(d) {return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);}
-function getDayName(d) {var weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];return weekday[d.getDay()];}
-function getMonthName(d) {var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];return months[d.getMonth()];}
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function getYear(d) { return d.getFullYear(); }
+function getMonth(d) { return ("0" + (d.getMonth()+1)).slice(-2); }
+function getDate(d) { return ("0" + d.getDate()).slice(-2); }
+function getHHMM(d) { return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+function getDayName(d) { return WEEKDAYS[d.getDay()]; }
+function getMonthName(d) { return MONTHS[d.getMonth()]; }
 
 // Date formatting for display
-function formatNiceDateTime(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d) + ' ' + getHHMM(d);}
-function formatNiceDate(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d);}
+function formatNiceDateTime(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d) + ' ' + getHHMM(d); }
+function formatNiceDate(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d); }
 
 // Date formatting for OmniFocus parsing
 function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
