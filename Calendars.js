@@ -1,6 +1,7 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: orange; icon-glyph: magic-wand;
+// always-run-in-app: true; icon-color: purple;
+// icon-glyph: calendar-alt;
 
 // V1.0.1
 
