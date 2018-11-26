@@ -2,7 +2,7 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic-wand;
 
-// V1.0
+// V1.0.1
 
 // =============================================================================================
 // A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
