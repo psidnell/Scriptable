@@ -180,7 +180,7 @@ function addRow(uiTable, dateText, eventText) {
     return uiTableRow;
 }
 
-function handleSelectedEvents(events) {
+function handleCalendarEvents(events) {
     let uiTable = new UITable();
     let i;
     let lastEventDate = null;
@@ -202,7 +202,7 @@ function handleSelectedEvents(events) {
         } else {
             time = getHHMM(event.startDate);
         }
-        
+
         addRow(uiTable, time, event.title).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         };
@@ -223,7 +223,7 @@ function handleCalendars(calendars) {
     let now = new Date();
     let future = new Date();
     future.setDate(future.getDate() + DAYS_TO_SHOW);
-    CalendarEvent.between(now, future, calendars).then(handleSelectedEvents, handleErr);
+    CalendarEvent.between(now, future, calendars).then(handleCalendarEvents, handleErr);
 }
 
 Calendar.forEvents().then(handleCalendars, handleErr);
