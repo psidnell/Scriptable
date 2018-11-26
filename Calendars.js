@@ -168,7 +168,7 @@ function addTitleRow(uiTable, text) {
 }
 
 // Create a row for an event
-function addRow(uiTable, dateText, eventText, isHeader) {
+function addRow(uiTable, dateText, eventText, subText) {
     let uiTableRow = new UITableRow();
 
     // The split seems OK on the narrowest ipad split view
@@ -176,7 +176,7 @@ function addRow(uiTable, dateText, eventText, isHeader) {
     cell1.widthWeight = 20;
     cell1.leftAligned();
 
-    let cell2 = uiTableRow.addText(eventText, 'm');
+    let cell2 = uiTableRow.addText(eventText, subText);
     cell2.widthWeight = 80;
     cell2.leftAligned();
 
@@ -202,6 +202,7 @@ function handleCalendarEvents(events) {
         }
 
         // Time and Title
+        let subText = [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' ');
         let time;
         if (isAllDayAndMultiDay(event)) {
             time = "Starts";
@@ -211,12 +212,9 @@ function handleCalendarEvents(events) {
             time = getHHMM(event.startDate);
         }
 
-        addRow(uiTable, time, event.title, false).onSelect = (selIndex) => {
+        addRow(uiTable, time, event.title, subText).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         };
-
-        // calendar/
-        addRow(uiTable, '', [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' '), false);
 
         lastEventDate = eventDate;
     }
