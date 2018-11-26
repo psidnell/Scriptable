@@ -88,7 +88,8 @@ function createEntry(data) {
     url.addParameter('defer', data.defer);
     url.addParameter('flag', 'true');
     url.addParameter('note', data.note);
-    url.addParameter('reveal-new-item', 'false'); // Ignored?, always opened in edit mode in OF
+    url.addParameter('reveal-new-item', 'false');
+    url.addParameter('autosave', 'true');
     url.open();
 }
 
