@@ -10,12 +10,9 @@
 // Refs:
 // - Scriptable API Docs https://docs.scriptable.app/
 // =============================================================================================
-//
 // TODO:
+// - Can I adjust font size?
 // - Add attachments from event object
-//
-// Things that may not be possible:
-// - Adjust font size
 // - Add link back to calendar - is this possible with either the default iOS mail app or Fantastical?
 
 // Number of days to show in the picker
@@ -160,8 +157,9 @@ function handleSelectedEvent(event) {
 function addTitleRow(uiTable, text) {
     let uiTableRow = new UITableRow();
     let titleCell = uiTableRow.addText(text);
+    titleCell.centerAligned();
     titleCell.widthWeight = 100;
-    uiTableRow.height = 40;
+    uiTableRow.height = 50;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
     uiTableRow.isHeader = true;
@@ -170,7 +168,7 @@ function addTitleRow(uiTable, text) {
 }
 
 // Create a row for an event
-function addRow(uiTable, dateText, eventText) {
+function addRow(uiTable, dateText, eventText, isHeader) {
     let uiTableRow = new UITableRow();
 
     // The split seems OK on the narrowest ipad split view
@@ -178,13 +176,14 @@ function addRow(uiTable, dateText, eventText) {
     cell1.widthWeight = 20;
     cell1.leftAligned();
 
-    let cell2 = uiTableRow.addText(eventText);
+    let cell2 = uiTableRow.addText(eventText, 'm');
     cell2.widthWeight = 80;
     cell2.leftAligned();
 
-    uiTableRow.height = 40;
+    uiTableRow.height = 60;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
+    uiTableRow.isHeader = isHeader;
     uiTable.addRow(uiTableRow);
     return uiTableRow;
 }
@@ -212,12 +211,12 @@ function handleCalendarEvents(events) {
             time = getHHMM(event.startDate);
         }
 
-        addRow(uiTable, time, event.title).onSelect = (selIndex) => {
+        addRow(uiTable, time, event.title, false).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         };
 
         // calendar/
-        addRow(uiTable, '', [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' '));
+        addRow(uiTable, '', [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' '), false);
 
         lastEventDate = eventDate;
     }
