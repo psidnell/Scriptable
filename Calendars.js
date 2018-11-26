@@ -115,14 +115,17 @@ function handleSelectedEvent(event) {
     let end = formatOFDate(event.endDate);
     let location = event.location ? event.location : '';
     let attendees = event.attendees ? event.attendees : [];
+
+    // Create note
     let note = 'Calendar: ' + altCalendarName + '\n\n';
     if (location !==  '') {
-       note += 'Location:\n' + location.trim() + '\n\n';
+        note += 'Location:\n' + location.trim() + '\n\n';
     }
     if (attendees.length > 0) {
         note += 'Attendees:\n' + extractAttendees(attendees).join('\n') + '\n\n';
     }
 
+    // Create the event(s) in OmniFocus
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
         createEntry({
