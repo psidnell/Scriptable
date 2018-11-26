@@ -67,10 +67,10 @@ function getProjectFromCalendar(realCalendarName) {
 }
 
 // Extract the attendee names from the event
-function extractAttendees(event) {
+function extractAttendees(attendeeObjects) {
     let attendees = [];
     let i;
-    for (i = 0; i < events.attendees; i++) {
+    for (i = 0; i < attendeeObjects.length; i++) {
         let attendee = events.attendees[i];
         attendees.push(attendee.name);
     }
@@ -114,9 +114,10 @@ function handleSelectedEvent(event) {
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
     let location = event.location ? event.location : [];
-    let note = 'Calendar: ' + altCalendarName;
+    let attendees = event.attendees ? event.attendees : [];
+        let note = 'Calendar: ' + altCalendarName;
     note += '\n\nLocation:\n' + location.join('\n');
-    note += '\n\nAttendees:\n' + extractAttendees(event).join('\n');
+    note += '\n\nAttendees:\n' + extractAttendees(attendees).join('\n');
 
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
