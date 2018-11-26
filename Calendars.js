@@ -1,44 +1,67 @@
-// Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic-wand;
-// TODO
-// Constants at top for work/home calendars and projects
-// Date at start of line?
 
+// =============================================================================================
+// A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
+// and creates OmniFocus events for those selected. Multi-day events get two OmniFocus events
+// created, one for the start day, one for the end day.
+// =============================================================================================
+// Refs:
+// - Scriptable API Docs https://docs.scriptable.app/
+// =============================================================================================
+// TODO:
+// - Add attachments from event object
+// - Add link back to calendar - is this possible with either the default iOS mail app or Fantastical?
+
+// Number of days to show in the picker
+DAYS_TO_SHOW = 64;
+
+// The default project for creating OmniFocus events
+DEFAULT_PROJECT = ['Home', 'Calendar', 'Calendar'].join(' : ');
+
+// Here you can create mappings so that different calendars create Omnifocus events in different projects
+const PROJECT_MAP = {
+    'Calendar': ['Work','Calendar'].join(' : ')
+};
+
+// Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
+// Here you can add translations from the real name to an alternate one that will be used in the UI.
 const CALENDAR_TITLE_MAP = {
     'Calendar': 'Work'
 };
 
-const PROJECT_MAP = {
-    'Calendar': 'Work : Calendar',
-    'Home': 'Home: Calendar: Calendar'
-};
-
-// Whole bunch of date formatting
+// Whole bunch of little date formatting functions
 function getYear(d) {return d.getFullYear();}
 function getMonth(d) {return ("0" + (d.getMonth()+1)).slice(-2);}
 function getDate(d) {return ("0" + d.getDate()).slice(-2);}
 function getHHMM(d) {return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);}
-function formatDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
-function formatDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
 function getDayName(d) {var weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];return weekday[d.getDay()];}
 function getMonthName(d) {var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];return months[d.getMonth()];}
+
+// Date formatting for display
 function formatNiceDateTime(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d) + ' ' + getHHMM(d);}
 function formatNiceDate(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d);}
 
+// Date formatting for OmniFocus parsing
+function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
+function formatOFDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
+
 // Tidy up a location extracted from the calendar
-function tidyLocation(location) {
-    return location.split('\n').join(', ');
+function locationToSingleLine(locationString) {
+    // Put the location on a single line
+    return locationString.split('\n').join(', ');
 }
 
-function fixCalendarName(name) {
-    let newName = CALENDAR_TITLE_MAP[name];
-    return newName != null ? newName : name;
+// Look up any alternate calendar name
+function getAlternateCalendarName(realCalendarName) {
+    let newName = CALENDAR_TITLE_MAP[realCalendarName];
+    return newName != null ? newName : realCalendarName;
 }
 
-function deriveProjectFromCalendar(calendar) {
-    let project = PROJECT_MAP[calendar];
-    return project != null ? project : PROJECT_MAP['Home'];
+// Look up the project to be used for the calendar name
+function getProjectFromCalendar(realCalendarName) {
+    let project = PROJECT_MAP[realCalendarName];
+    return project != null ? project : DEFAULT_PROJECT;
 }
 
 // Create an Omnifocus entry
@@ -51,66 +74,68 @@ function createEntry(data) {
     url.addParameter('flag', 'true');
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false'); // Ignored?, always opened in edit mode in OF
-    console.log('Openning ' + url.getURL())
+    console.log('Openning ' + url.getURL());
     url.open();
 }
 
-// Process an event that has been selected for addition to OmniFocus   
+// Process an event that has been selected for addition to OmniFocus
 function handleSelectedEvent(event) {
-    let calendar = fixCalendarName(event.calendar.title);
+    let altCalendarName = getAlternateCalendarName(event.calendar.title);
     let title = event.title;
-    let project = deriveProjectFromCalendar(event.calendar.title);
-    let start = formatDate(event.startDate);
-    let end = formatDate(event.endDate);
+    let projectForCalendar = getProjectFromCalendar(event.calendar.title);
+    let start = formatOFDate(event.startDate);
+    let end = formatOFDate(event.endDate);
     let singleDay = start === end;
-    let location = event.location
-    let note = [calendar, location].join('\n');
-    
-    if ('Work' === calendar) {
-        project = 'Work : Calendar';
-    }
-    
+    let location = event.location;
+    let note = [
+        'Calendar: ' + altCalendarName,
+        'Location:',
+        location
+    ].join('\n');
+
     if (event.isAllDay && !singleDay) {
-        // Multi day event
+        // Multi day event - start day
         createEntry({
-        		name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
-        		project: project,
-        		due: start,
-        		defer: start,
-        		note: note
-    		});
+            name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
+            project: projectForCalendar,
+            due: start,
+            defer: start,
+            note: note
+        });
+        // Multi day event - end day
         createEntry({
-        		name: title + ' ends ' + formatNiceDate(event.endDate),
-        		project: project,
-        		due: end,
-        		defer: end,
-        		note: note
-    		});
+            name: title + ' ends ' + formatNiceDate(event.endDate),
+            project: projectForCalendar,
+            due: end,
+            defer: end,
+            note: note
+        });
     } else if (event.isAllDay) {
-        // All day event
-        let due = formatDate(event.startDate);
-        let defer = formatDate(event.startDate);
+        // All day event for a single day
+        let due = formatOFDate(event.startDate);
+        let defer = formatOFDate(event.startDate);
         createEntry({
-        		name: title + ' ' + formatNiceDate(event.startDate),
-        		project: project,
-        		due: due,
-        		defer: defer,
-        		note: note
-    		});
+            name: title + ' ' + formatNiceDate(event.startDate),
+            project: projectForCalendar,
+            due: due,
+            defer: defer,
+            note: note
+        });
     } else {
-        // Timed event
-        let due = formatDateTime(event.startDate);
-        let defer = formatDate(event.startDate);
+        // Simple event with time
+        let due = formatOFDateTime(event.startDate);
+        let defer = formatOFDate(event.startDate);
         createEntry({
-        		name: title + ' ' + formatNiceDateTime(event.startDate),
-        		project: project,
-        		due: due,
-        		defer: defer,
-        		note: note
-    		});
+            name: title + ' ' + formatNiceDateTime(event.startDate),
+            project: projectForCalendar,
+            due: due,
+            defer: defer,
+            note: note
+        });
     }
 }
 
+// Create a title row (bold text)
 function addTitleRow(uiTable, text) {
     let uiTableRow = new UITableRow();
     let titleCell = uiTableRow.addText(text);
@@ -123,17 +148,19 @@ function addTitleRow(uiTable, text) {
     return uiTableRow;
 }
 
-function addRow(uiTable, text1, text2) {
+// Create a row for an event
+function addRow(uiTable, dateText, eventText) {
     let uiTableRow = new UITableRow();
-    
-    let cell1 = uiTableRow.addText(text1);
+
+    // The 15/85 split seems OK on the narrowest ipad split view
+    let cell1 = uiTableRow.addText(dateText);
     cell1.widthWeight = 15;
     cell1.leftAligned();
-    
-    let cell2 = uiTableRow.addText(text2);
+
+    let cell2 = uiTableRow.addText(eventText);
     cell2.widthWeight = 85;
     cell2.leftAligned();
-    
+
     uiTableRow.height = 40;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
@@ -141,27 +168,27 @@ function addRow(uiTable, text1, text2) {
     return uiTableRow;
 }
 
-function handleEvents(events) {
+function handleSelectedEvents(events) {
     let uiTable = new UITable();
     let i;
     let lastEventDate = null;
     for (i = 0; i < events.length; i++) {
         let event = events[i];
         let eventDate = formatNiceDate(event.startDate);
-        
+
         // date
         if (eventDate !== lastEventDate) {
             addTitleRow(uiTable, eventDate);
         }
-        
+
         // title
         addRow(uiTable, getHHMM(event.startDate), event.title).onSelect = (selIndex) => {
             handleSelectedEvent(event);
-        }
-        
+        };
+
         // calendar/
-        addRow(uiTable, '', [fixCalendarName(event.calendar.title), tidyLocation(event.location)].join(' '));
-        
+        addRow(uiTable, '', [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' '));
+
         lastEventDate = eventDate;
     }
     QuickLook.present(uiTable);
@@ -174,8 +201,8 @@ function handleErr(val) {
 function handleCalendars(calendars) {
     let now = new Date();
     let future = new Date();
-    future.setDate(future.getDate() + 64);
-    CalendarEvent.between(now, future, calendars).then(handleEvents, handleErr);
+    future.setDate(future.getDate() + DAYS_TO_SHOW);
+    CalendarEvent.between(now, future, calendars).then(handleSelectedEvents, handleErr);
 }
 
 Calendar.forEvents().then(handleCalendars, handleErr);
