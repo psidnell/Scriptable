@@ -1,6 +1,20 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: orange; icon-glyph: magic-wand;
+// TODO
+// Constants at top for work/home calendars and projects
+// Date at start of line?
+
+const CALENDAR_TITLE_MAP = {
+    'Calendar': 'Work'
+};
+
+const PROJECT_MAP = {
+    'Calendar': 'Work : Calendar',
+    'Home': 'Home: Calendar: Calendar'
+};
+
+// Whole bunch of date formatting
 function getYear(d) {return d.getFullYear();}
 function getMonth(d) {return ("0" + (d.getMonth()+1)).slice(-2);}
 function getDate(d) {return ("0" + d.getDate()).slice(-2);}
@@ -12,6 +26,22 @@ function getMonthName(d) {var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'
 function formatNiceDateTime(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d) + ' ' + getHHMM(d);}
 function formatNiceDate(d) {return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d);}
 
+// Tidy up a location extracted from the calendar
+function tidyLocation(location) {
+    return location.split('\n').join(', ');
+}
+
+function fixCalendarName(name) {
+    let newName = CALENDAR_TITLE_MAP[name];
+    return newName != null ? newName : name;
+}
+
+function deriveProjectFromCalendar(calendar) {
+    let project = PROJECT_MAP[calendar];
+    return project != null ? project : PROJECT_MAP['Home'];
+}
+
+// Create an Omnifocus entry
 function createEntry(data) {
     let url = new CallbackURL('omnifocus:///add');
     url.addParameter('name', data.name);
@@ -20,25 +50,23 @@ function createEntry(data) {
     url.addParameter('defer', data.defer);
     url.addParameter('flag', 'true');
     url.addParameter('note', data.note);
-    url.addParameter('reveal-new-item', 'false'); // Ignored?
+    url.addParameter('reveal-new-item', 'false'); // Ignored?, always opened in edit mode in OF
+    console.log('Openning ' + url.getURL())
     url.open();
 }
 
-function tidyLocation(location) {
-    return location.split('\n').join(', ');
-}
-    
+// Process an event that has been selected for addition to OmniFocus   
 function handleSelectedEvent(event) {
-    let calendar = event.calendar.title;
+    let calendar = fixCalendarName(event.calendar.title);
     let title = event.title;
-    let project = 'Home : Calendar : Calendar';
+    let project = deriveProjectFromCalendar(event.calendar.title);
     let start = formatDate(event.startDate);
     let end = formatDate(event.endDate);
     let singleDay = start === end;
     let location = event.location
     let note = [calendar, location].join('\n');
     
-    if ('Calendar' === calendar) {
+    if ('Work' === calendar) {
         project = 'Work : Calendar';
     }
     
@@ -83,14 +111,32 @@ function handleSelectedEvent(event) {
     }
 }
 
-function addRow(uiTable, text, isHeader) {
+function addTitleRow(uiTable, text) {
     let uiTableRow = new UITableRow();
     let titleCell = uiTableRow.addText(text);
     titleCell.widthWeight = 100;
     uiTableRow.height = 40;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
-    uiTableRow.isHeader = isHeader;
+    uiTableRow.isHeader = true;
+    uiTable.addRow(uiTableRow);
+    return uiTableRow;
+}
+
+function addRow(uiTable, text1, text2) {
+    let uiTableRow = new UITableRow();
+    
+    let cell1 = uiTableRow.addText(text1);
+    cell1.widthWeight = 15;
+    cell1.leftAligned();
+    
+    let cell2 = uiTableRow.addText(text2);
+    cell2.widthWeight = 85;
+    cell2.leftAligned();
+    
+    uiTableRow.height = 40;
+    uiTableRow.cellSpacing = 10;
+    uiTableRow.dismissOnSelect = false;
     uiTable.addRow(uiTableRow);
     return uiTableRow;
 }
@@ -105,19 +151,16 @@ function handleEvents(events) {
         
         // date
         if (eventDate !== lastEventDate) {
-            addRow(uiTable, eventDate, true);
+            addTitleRow(uiTable, eventDate);
         }
         
-        // Time
-        addRow(uiTable, getHHMM(event.startDate), true);
-        
         // title
-        addRow(uiTable, event.title, false).onSelect = (selIndex) => {
+        addRow(uiTable, getHHMM(event.startDate), event.title).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         }
         
         // calendar/
-        addRow(uiTable, [event.calendar.title, tidyLocation(event.location)].join(' '), false);
+        addRow(uiTable, '', [fixCalendarName(event.calendar.title), tidyLocation(event.location)].join(' '));
         
         lastEventDate = eventDate;
     }
