@@ -113,7 +113,7 @@ function handleSelectedEvent(event) {
     let projectForCalendar = getProjectFromCalendar(event.calendar.title);
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
-    let location = event.location;
+    let location = event.location ? event.location : [];
     let note = 'Calendar: ' + altCalendarName;
     note += '\n\nLocation:\n' + location.join('\n');
     note += '\n\nAttendees:\n' + extractAttendees(event).join('\n');
