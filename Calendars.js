@@ -78,6 +78,17 @@ function createEntry(data) {
     url.open();
 }
 
+function isAllDayAndMultiDay(event) {
+    let start = formatOFDate(event.startDate);
+    let end = formatOFDate(event.endDate);
+    let singleDay = start === end;
+    return event.isAllDay && !singleDay;
+}
+
+function isAllDayAndSingleDay(event) {
+    return event.isAllDay;
+}
+
 // Process an event that has been selected for addition to OmniFocus
 function handleSelectedEvent(event) {
     let altCalendarName = getAlternateCalendarName(event.calendar.title);
@@ -85,7 +96,6 @@ function handleSelectedEvent(event) {
     let projectForCalendar = getProjectFromCalendar(event.calendar.title);
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
-    let singleDay = start === end;
     let location = event.location;
     let note = [
         'Calendar: ' + altCalendarName,
@@ -93,7 +103,7 @@ function handleSelectedEvent(event) {
         location
     ].join('\n');
 
-    if (event.isAllDay && !singleDay) {
+    if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
         createEntry({
             name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
@@ -110,7 +120,7 @@ function handleSelectedEvent(event) {
             defer: end,
             note: note
         });
-    } else if (event.isAllDay) {
+    } else if (isAllDayAndSingleDay(event)) {
         // All day event for a single day
         let due = formatOFDate(event.startDate);
         let defer = formatOFDate(event.startDate);
@@ -176,13 +186,22 @@ function handleSelectedEvents(events) {
         let event = events[i];
         let eventDate = formatNiceDate(event.startDate);
 
-        // date
+        // Date Header
         if (eventDate !== lastEventDate) {
             addTitleRow(uiTable, eventDate);
         }
 
-        // title
-        addRow(uiTable, getHHMM(event.startDate), event.title).onSelect = (selIndex) => {
+        // Time and Title
+        let time;
+        if (isAllDayAndMultiDay(event)) {
+            time = "Starts";
+        } else if (isAllDayAndSingleDay(event)) {
+            time = "All Day";
+        } else {
+            time = getHHMM(event.startDate);
+        }
+        
+        addRow(uiTable, time, event.title).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         };
 
