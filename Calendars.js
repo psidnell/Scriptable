@@ -11,9 +11,7 @@
 // - Scriptable API Docs https://docs.scriptable.app/
 // =============================================================================================
 // TODO:
-// - Can I adjust font size?
 // - Add attachments from event object
-// - Add link back to calendar - is this possible with either the default iOS mail app or Fantastical?
 
 // Number of days to show in the picker
 DAYS_TO_SHOW = 64;
