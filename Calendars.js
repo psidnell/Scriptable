@@ -202,7 +202,7 @@ function handleCalendarEvents(events) {
         }
 
         // Time and Title
-        let subText = [getAlternateCalendarName(event.calendar.title), locationToSingleLine(event.location)].join(' ');
+        let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
         let time;
         if (isAllDayAndMultiDay(event)) {
             time = "Starts";
