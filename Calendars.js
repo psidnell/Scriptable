@@ -157,7 +157,7 @@ function handleSelectedEvent(event) {
 function addTitleRow(uiTable, text) {
     let uiTableRow = new UITableRow();
     let titleCell = uiTableRow.addText(text);
-    titleCell.centerAligned();
+    titleCell.leftAligned();
     titleCell.widthWeight = 100;
     uiTableRow.height = 50;
     uiTableRow.cellSpacing = 10;
@@ -180,10 +180,10 @@ function addRow(uiTable, dateText, eventText, subText) {
     cell2.widthWeight = 80;
     cell2.leftAligned();
 
-    uiTableRow.height = 60;
+    uiTableRow.height = 70;
     uiTableRow.cellSpacing = 10;
     uiTableRow.dismissOnSelect = false;
-    uiTableRow.isHeader = isHeader;
+    uiTableRow.isHeader = false;
     uiTable.addRow(uiTableRow);
     return uiTableRow;
 }
