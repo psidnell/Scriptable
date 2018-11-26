@@ -115,9 +115,9 @@ function handleSelectedEvent(event) {
     let end = formatOFDate(event.endDate);
     let location = event.location ? event.location : [];
     let attendees = event.attendees ? event.attendees : [];
-        let note = 'Calendar: ' + altCalendarName;
-    note += '\n\nLocation:\n' + location.join('\n');
-    note += '\n\nAttendees:\n' + extractAttendees(attendees).join('\n');
+    let note = 'Calendar: ' + altCalendarName + '\n';
+    note += '\nLocation:\n' + location.join('\n') + '\n';
+    note += '\nAttendees:\n' + extractAttendees(attendees).join('\n') + '\n';
 
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
