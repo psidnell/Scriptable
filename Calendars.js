@@ -98,7 +98,7 @@ function isAllDayAndMultiDay(event) {
     return event.isAllDay && !singleDay;
 }
 
-// True if the event is a multi-day all day event
+// True if the event is a multi-day single day event
 function isAllDayAndSingleDay(event) {
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
