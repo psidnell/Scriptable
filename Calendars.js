@@ -128,6 +128,9 @@ function handleSelectedEvent(event) {
     if (attendees.length > 0) {
         note += 'Attendees:\n' + extractAttendees(attendees).join('\n') + '\n\n';
     }
+    if (event.notes && event.notes.length > 0) {
+        note += 'Notes:\n' + event.notes;
+    }
 
     // Create the event(s) in OmniFocus
     if (isAllDayAndMultiDay(event)) {
