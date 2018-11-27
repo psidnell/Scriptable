@@ -80,6 +80,10 @@ function extractAttendees(attendeeObjects) {
     return attendees;
 }
 
+function handleErr(val) {
+    console.error(val);
+}
+
 // Create an Omnifocus entry
 function createEntry(data) {
     let url = new CallbackURL('omnifocus:///add');
@@ -91,7 +95,18 @@ function createEntry(data) {
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false');
     url.addParameter('autosave', 'true');
-    url.open();
+    
+    // Confirmation alert
+    let alert = new Alert();
+    alert.title = 'Create OmniFocus Task';
+    alert.message = 'Task: "' + data.name + '"\nProject: "' + data.project + '"';
+    alert.addAction('OK');
+    alert.addCancelAction('Cancel');
+    alert.present().then((selId) => {
+        if (selId === 0) {
+            url.open();
+        }
+    }, handleErr);
 }
 
 // True if the event is a multi-day all day event
@@ -241,10 +256,6 @@ function handleCalendarEvents(events) {
         lastEventDate = eventDate;
     }
     QuickLook.present(uiTable);
-}
-
-function handleErr(val) {
-    console.error(val);
 }
 
 function handleCalendars(calendars) {
