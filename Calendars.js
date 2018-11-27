@@ -25,6 +25,9 @@
 // A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
 // and creates OmniFocus events for those selected. Multi-day events get two OmniFocus events
 // created, one for the start day, one for the end day.
+//
+// Below are some constants you'll likely want to edit for your OmniFocus/Calendar setup.
+//
 // =============================================================================================
 // Refs:
 // - Scriptable API Docs https://docs.scriptable.app/
