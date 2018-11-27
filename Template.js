@@ -4,14 +4,18 @@
 
 /*
 TODO
-- populate lines with variables
-- collect lines
 - send lines to Omnifocus
 - handle pre-defined variables
 - final alert on entry
 */
 function processLine(line, variables) {
-    console.log('line: ' + line);
+    let variableNames = Object.keys(variables);
+    for (let i = 0; i < variableNames.length; i++) {
+        let variableName = variableNames[i];
+        let variable = '${' + variableName + '}';
+        line = line.replace(variable, variables[variableName]);
+    }
+    return line;
 }
     
 function extractProject(line) {
@@ -61,11 +65,14 @@ function expand(text) {
             let project = extractProject(lines[0]);
             console.log('project: ' + project);
             if (project) {
+                let buffer = '';
                 let firstLine = lines[0].replace(/<<.*>>/, '');
-                processLine(firstLine, variables);
+                buffer += processLine(firstLine, variables) + '\n';
                 for(let i = 1; i < lines.length; i++) {
-                    processLine(lines[i], variables);
+                    buffer += processLine(lines[i], variables) + '\n';
                 }
+                
+                console.log(buffer);
             }
         }
     });
