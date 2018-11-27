@@ -3,8 +3,24 @@
 // always-run-in-app: true; icon-color: purple;
 // icon-glyph: calendar-alt;
 
-// V1.0.2
+/*
+ * Copyright 2018 Paul Sidnell
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
+// V1.0.2
+//
 // =============================================================================================
 // A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
 // and creates OmniFocus events for those selected. Multi-day events get two OmniFocus events
@@ -13,8 +29,6 @@
 // Refs:
 // - Scriptable API Docs https://docs.scriptable.app/
 // =============================================================================================
-// TODO:
-// - Add attachments from event object (don't seem to ba available)
 
 // Number of days to show in the picker
 DAYS_TO_SHOW = 64;
@@ -95,7 +109,7 @@ function createEntry(data) {
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false');
     url.addParameter('autosave', 'true');
-    
+
     // Confirmation alert
     let alert = new Alert();
     alert.title = 'Create OmniFocus Task';
