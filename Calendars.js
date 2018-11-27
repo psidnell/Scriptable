@@ -3,7 +3,7 @@
 // always-run-in-app: true; icon-color: purple;
 // icon-glyph: calendar-alt;
 
-// V1.0.1
+// V1.0.2
 
 // =============================================================================================
 // A Scriptable (https://scriptable.app/) script that opens a list of upcoming iOS calendar events
