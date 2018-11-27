@@ -1,8 +1,17 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: purple; icon-glyph: stream; share-sheet-inputs: plain-text;
-function processLine(line) {
-    //console.log('line: ' + line);
+
+/*
+TODO
+- populate lines with variables
+- collect lines
+- send lines to Omnifocus
+- handle pre-defined variables
+- final alert on entry
+*/
+function processLine(line, variables) {
+    console.log('line: ' + line);
 }
     
 function extractProject(line) {
@@ -52,10 +61,10 @@ function expand(text) {
             let project = extractProject(lines[0]);
             console.log('project: ' + project);
             if (project) {
-                let firstLine = lines[0].split('<<')[0] + lines[0].split('>>')[1];
-                processLine(firstLine);
+                let firstLine = lines[0].replace(/<<.*>>/, '');
+                processLine(firstLine, variables);
                 for(let i = 1; i < lines.length; i++) {
-                    processLine(lines[i]);
+                    processLine(lines[i], variables);
                 }
             }
         }
