@@ -26,25 +26,40 @@ function extractVariables(text) {
     return variables;
 }
 
-function getVariableValues(variableNames) {
+async function getVariableValues(variableNames) {
+    let variables = {};
+    for (let i = 0; i < variableNames.length; i++) {
+        let variableName = variableNames[i];
+        let alert = new Alert();
+        alert.message = 'Value for "' + variableName + '"';
+        alert.addTextField('value')
+        alert.addAction('OK');
+        let promise = alert.presentAlert();
+        await promise;
+        let value = alert.textFieldValue(0);
+        variables[variableName] = value;
+    }
+    return variables;
 }
 
 function expand(text) {
     let variableNames = extractVariables(text);
     console.log('variable names: ' + variableNames);
-    let variables = getVariableValues(variableNames);
-    let lines = text.split('\n');
-    if (lines.length >= 2) {
-        let project = extractProject(lines[0]);
-        console.log('project: ' + project);
-        if (project) {
-            let firstLine = lines[0].split('<<')[0] + lines[0].split('>>')[1];
-            processLine(firstLine);
-            for(let i = 1; i < lines.length; i++) {
-                processLine(lines[i]);
+    getVariableValues(variableNames).then((variables) => {
+        console.log(variables);
+        let lines = text.split('\n');
+        if (lines.length >= 2) {
+            let project = extractProject(lines[0]);
+            console.log('project: ' + project);
+            if (project) {
+                let firstLine = lines[0].split('<<')[0] + lines[0].split('>>')[1];
+                processLine(firstLine);
+                for(let i = 1; i < lines.length; i++) {
+                    processLine(lines[i]);
+                }
             }
         }
-    }
+    });
 }
 
 //expand(args.plainTexts[0]);
