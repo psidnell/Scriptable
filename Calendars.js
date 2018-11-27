@@ -244,9 +244,8 @@ function addRow(uiTable, dateText, eventText, subText) {
 
 function handleCalendarEvents(events) {
     let uiTable = new UITable();
-    let i;
     let lastEventDate = null;
-    for (i = 0; i < events.length; i++) {
+    for (let i = 0; i < events.length; i++) {
         let event = events[i];
         let eventDate = formatNiceDate(event.startDate);
 
