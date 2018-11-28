@@ -62,16 +62,16 @@ Tips:
 - Add taskpaper directives to the end of a line like @due(+1d).
 - Make tags a variable with @tags(${TAG})
 
-If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that is put
-into the root OmniFocus projects.
+Testing:
+
+If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that
+puts the expanded project into the OmniFocus projects root.
 **********************************************************************************************/
 
 
 /*
 TODO
-- Make HERE generate maps url for now...
-- HERE not getting address yet
-- tidy, comments etc.
+- HERE not looking up address (possible?), creating maps URL for now
 */
 
 // Whole bunch of little date formatting functions
@@ -101,13 +101,15 @@ function processLine(line, variables) {
     }
     return line;
 }
-    
-function extractProject(line) {
+
+// Extract the target from a line "... <<target>> ..."
+function extractTarget(line) {
     let pattern = /.*<<(.*)>>.*/;
     let match = pattern.exec(line);
     return match.length >= 2 ? match[1] : null;
 }
 
+// Extract a list of the unique ${...} variables from the template
 function extractVariables(text) {
     let textOnOneLine = text.split('\n').join('');
     let varMap = {};
@@ -123,6 +125,8 @@ function extractVariables(text) {
     return variables;
 }
 
+// Create a map of the variables and their values using predfined
+// rules or asking for values
 async function getVariableValues(variableNames) {
     let variables = {};
     for (let i = 0; i < variableNames.length; i++) {
@@ -145,13 +149,15 @@ async function getVariableValues(variableNames) {
             variables[variableName] = value;
         } else if ('HERE' === variableName) {
             let promise = Location.current();
-            console.log('Fetching location, please wait...');
+            console.log('Fetching location, please wait a few seconds...');
             let location = await promise;
             // returns {"verticalAccuracy":4,"longitude":-2.5946741178655945,"latitude":51.47271370985682,"horizontalAccuracy":10,"altitude":45.898406982421875}
             // TODO lookup address? https://talk.automators.fm/t/get-address-from-location-object/3332
-            let value = '(' + location.latitude + ',' + location.longitude + ')';
+            // Generate a maps URL for now
+            let value = 'http://maps.apple.com/?daddr=' + location.latitude + ',' + location.longitude;
             variables[variableName] = value;
         } else {
+            // Not a predifined variable, as the user
             let alert = new Alert();
             alert.message = variableName;
             alert.addTextField('value')
@@ -170,43 +176,45 @@ function handleErr(val) {
 }
 
 // Create an Omnifocus entry
-async function createEntry(project, taskpaper) {
+async function createEntry(target, taskpaper) {
     let ofUrl = null;
     let url = new CallbackURL('omnifocus://x-callback-url/paste');
-    url.addParameter('target', project);
+    url.addParameter('target', target);
     url.addParameter('content', taskpaper);
 
     // Confirmation alert
     let alert = new Alert();
     alert.title = 'Expand OmniFocus Template';
-    alert.message = 'To ' + project;
+    alert.message = 'To ' + target;
     alert.addAction('OK');
     alert.addCancelAction('Cancel');
     let alertPromise = alert.present();
     let selId = await alertPromise;
     if (selId === 0) {
-      console.log(url.getURL())
+      // console.log('Generated URL: ' + url.getURL())
       let ofPromise = url.open();
       let result = await ofPromise;
       if (result) {
-          // result is like {"result":"omnifocus:///task/h8s1lykVkjM"}
+          // Haven't timed out.
+          // result is of the form {"result":"omnifocus:///task/h8s1lykVkjM"}
           ofUrl = result.result;
       }
     }
-    console.log('created: ' + ofUrl);
+    // console.log('Response from OmniFocus: ' + ofUrl
     return ofUrl;
 }
 
+// Expand the template, open in OmniFocus
 function expand(text) {
     let variableNames = extractVariables(text);
-    console.log('variable names: ' + variableNames);
+    // console.log('Variable names extracted: ' + variableNames);
     getVariableValues(variableNames).then((variables) => {
-        console.log(variables);
+        // console.log('Variable values: ' variables);
         let lines = text.split('\n');
         if (lines.length >= 2) {
-            let project = extractProject(lines[0]);
-            console.log('project: ' + project);
-            if (project) {
+            let target = extractTarget(lines[0]);
+            // console.log('Target: ' + target);
+            if (target) {
                 let buffer = '';
                 let firstLine = lines[0].replace(/<<.*>>/, '');
                 buffer += processLine(firstLine, variables) + '\n';
@@ -214,8 +222,8 @@ function expand(text) {
                     buffer += processLine(lines[i], variables) + '\n';
                 }
                 
-                console.log(buffer);
-                let urlPromise = createEntry(project, buffer);
+                // console.log('Expanded template: ' + buffer);
+                let urlPromise = createEntry(target, buffer);
                 urlPromise.then((taskUrl) => {
                     if (taskUrl) {
                         Safari.open(taskUrl);
