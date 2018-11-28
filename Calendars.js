@@ -51,6 +51,9 @@ const CALENDAR_TITLE_MAP = {
     'Calendar': 'Work'
 };
 
+// There are some calendars we just want to ignore, I have a duplicate holidays calendar in exchange.
+const CALENDARS_TO_IGNORE = new Set(['United Kingdom holidays']); 
+
 // Whole bunch of little date formatting functions
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -279,7 +282,8 @@ function handleCalendars(calendars) {
     let now = new Date();
     let future = new Date();
     future.setDate(future.getDate() + DAYS_TO_SHOW);
-    CalendarEvent.between(now, future, calendars).then(handleCalendarEvents, handleErr);
+    let filteredCalendars = calendars.filter(calendar => !CALENDARS_TO_IGNORE.has(calendar.title));
+    CalendarEvent.between(now, future, filteredCalendars).then(handleCalendarEvents, handleErr);
 }
 
 Calendar.forEvents().then(handleCalendars, handleErr);
