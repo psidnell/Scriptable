@@ -153,7 +153,7 @@ async function getVariableValues(variableNames) {
             let promise = Location.current();
             console.log('Fetching location, please wait a few seconds...');
             let location = await promise;
-            // returns {"verticalAccuracy":4,"longitude":-2.5946741178655945,"latitude":51.47271370985682,"horizontalAccuracy":10,"altitude":45.898406982421875}
+            // returns {"verticalAccuracy":4,"longitude":xxxxx,"latitude":yyyyy,"horizontalAccuracy":10,"altitude":45.898406982421875}
             // TODO lookup address? https://talk.automators.fm/t/get-address-from-location-object/3332
             // Generate a maps URL for now
             let value = 'http://maps.apple.com/?daddr=' + location.latitude + ',' + location.longitude;
