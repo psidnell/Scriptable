@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-// V0.0
+// V1.0.0
 
 /**********************************************************************************************
 Developed on iOS with:
@@ -92,12 +92,14 @@ function formatNiceDate(d) { return getDate(d) + ' ' + getMonthName(d) + ' ' + g
 function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
 function formatOFDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
 
+// Expand all the variables on a single line
 function processLine(line, variables) {
     let variableNames = Object.keys(variables);
     for (let i = 0; i < variableNames.length; i++) {
         let variableName = variableNames[i];
         let variable = '${' + variableName + '}';
-        line = line.replace(variable, variables[variableName]);
+        let value = variables[variableName];
+        line = line.replace(variable, value);
     }
     return line;
 }
