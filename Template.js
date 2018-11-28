@@ -245,6 +245,6 @@ if (args && args.plainTexts.length > 0) {
         '		\n' +
         '		${YEAR}\n' + 
         '		\n' +
-        '		${HERExx}\n'
+        '		${HERE}\n'
     );
 }
