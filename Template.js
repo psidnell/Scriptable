@@ -3,6 +3,24 @@
 // always-run-in-app: true; icon-color: purple;
 // icon-glyph: stream; share-sheet-inputs: plain-text;
 /*
+ * Copyright 2018 Paul Sidnell
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// V0.0
+
+/*
 This script is an action extension that expects to receive a project, task or task group shared from OmniFocus.
 The source can contain variables and the script will prompt or use built-in values. Finally the resultant project is
 sent back to OmniFocus with the values expanded.
@@ -26,6 +44,7 @@ Special variables that are filled automatically are:
 - ${TIME} - 08:44
 - ${DAY} - Saturday
 - ${MONTH} - November
+- ${YEAR} - 2018
 - ${HERE} - current address
 
 Tips:
@@ -112,6 +131,9 @@ async function getVariableValues(variableNames) {
         } else if ('MONTH' === variableName) {
             let value = getMonthName(new Date());
             variables[variableName] = value;
+        } else if ('YEAR' === variableName) {
+            let value = getYear(new Date());
+            variables[variableName] = value;
         } else if ('HERE' === variableName) {
             let promise = Location.current();
             console.log('Fetching location, please wait...');
@@ -197,6 +219,8 @@ if (args && args.plainTexts.length > 0) {
         '		${DAY}\n' +
         '		\n' +
         '		${MONTH}\n' + 
+        '		\n' +
+        '		${YEAR}\n' + 
         '		\n' +
         '		${HERE}\n'
     );
