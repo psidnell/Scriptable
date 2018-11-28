@@ -69,10 +69,9 @@ into the root OmniFocus projects.
 
 /*
 TODO
-- Open expanded template in Omnifocus when finished
-- handle pre-defined variables like workflow:
-  HERE not getting address yet
-- tidy, comments and license
+- Make HERE generate maps url for now...
+- HERE not getting address yet
+- tidy, comments etc.
 */
 
 // Whole bunch of little date formatting functions
@@ -171,7 +170,8 @@ function handleErr(val) {
 }
 
 // Create an Omnifocus entry
-function createEntry(project, taskpaper) {
+async function createEntry(project, taskpaper) {
+    let ofUrl = null;
     let url = new CallbackURL('omnifocus://x-callback-url/paste');
     url.addParameter('target', project);
     url.addParameter('content', taskpaper);
@@ -182,12 +182,19 @@ function createEntry(project, taskpaper) {
     alert.message = 'To ' + project;
     alert.addAction('OK');
     alert.addCancelAction('Cancel');
-    alert.present().then((selId) => {
-        if (selId === 0) {
-            console.log(url.getURL())
-            url.open();
-        }
-    }, handleErr);
+    let alertPromise = alert.present();
+    let selId = await alertPromise;
+    if (selId === 0) {
+      console.log(url.getURL())
+      let ofPromise = url.open();
+      let result = await ofPromise;
+      if (result) {
+          // result is like {"result":"omnifocus:///task/h8s1lykVkjM"}
+          ofUrl = result.result;
+      }
+    }
+    console.log('created: ' + ofUrl);
+    return ofUrl;
 }
 
 function expand(text) {
@@ -208,12 +215,18 @@ function expand(text) {
                 }
                 
                 console.log(buffer);
-                createEntry(project, buffer)
+                let urlPromise = createEntry(project, buffer);
+                urlPromise.then((taskUrl) => {
+                    if (taskUrl) {
+                        Safari.open(taskUrl);
+                    }
+                });
             }
         }
     });
 }
 
+// Open the shared template if provided or a test one if run directly from scriptable)
 if (args && args.plainTexts.length > 0) {
     expand(args.plainTexts[0]);
 } else {
@@ -232,6 +245,6 @@ if (args && args.plainTexts.length > 0) {
         '		\n' +
         '		${YEAR}\n' + 
         '		\n' +
-        '		${HERE}\n'
+        '		${HERExx}\n'
     );
 }
