@@ -2,14 +2,44 @@
 // These must be at the very top of the file. Do not edit.
 // always-run-in-app: true; icon-color: purple;
 // icon-glyph: stream; share-sheet-inputs: plain-text;
+/*
+This script is an action extension that expects to receive a project, task or task group shared from OmniFocus.
+The source can contain variables and the script will prompt or use built-in values. Finally the resultant project is
+sent back to OmniFocus with the values expanded.
+
+The first line (e.g. the project name) must contain some special text enclosed in <<...>> e.g:
+
+    My Template Project<<Folder>>
+
+Folder is the name of the folder into which the final project will be placed. No folder path is necessary,
+"inbox" or "projects" may be used.
+
+Variable usage in the template project is of the form:
+
+${VARNAME}
+
+The script will pop up a dialog asking for the value when it runs.
+
+Special variables that are filled automatically are:
+
+- ${DATE} - 03 October 2018
+- ${TIME} - 08:44
+- ${DAY} - Saturday
+- ${MONTH} - November
+- ${HERE} - current address
+
+Tips:
+
+- You can leave your template project template paused in OmniFocus to avoid clutter, the expanded project will be active.
+- Add taskpaper directives to the end of a line like @due(+1d).
+- Make tags a variable with @tags(${TAG})
+*/
+
 
 /*
 TODO
 - handle pre-defined variables like workflow:
-  DATE
-  TIME
-  DAY
-  HERE
+  HERE not getting address yet
 - tidy, comments and license
 */
 
@@ -25,7 +55,7 @@ function getMonthName(d) { return MONTHS[d.getMonth()]; }
 
 // Date formatting for display
 function formatNiceDateTime(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d) + ' ' + getHHMM(d); }
-function formatNiceDate(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + getMonthName(d); }
+function formatNiceDate(d) { return getDate(d) + ' ' + getMonthName(d) + ' ' + getYear(d); }
 
 // Date formatting for OmniFocus parsing
 function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
@@ -68,7 +98,7 @@ async function getVariableValues(variableNames) {
         let variableName = variableNames[i];
         
         if ('DATE' === variableName) {
-            let value = formatOFDate(new Date());
+            let value = formatNiceDate(new Date());
             variables[variableName] = value;
         } else if ('TIME' === variableName) {
             let value = getHHMM(new Date());
