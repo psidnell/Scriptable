@@ -20,7 +20,11 @@
 
 // V0.0
 
-/*
+/**********************************************************************************************
+Developed on iOS with:
+- Scriptable (https://scriptable.app/)
+- WorkingCopy (https://workingcopyapp.com)
+
 This script is an action extension that expects to receive a project, task or task group shared from OmniFocus.
 The source can contain variables and the script will prompt or use built-in values. Finally the resultant project is
 sent back to OmniFocus with the values expanded.
@@ -55,7 +59,7 @@ Tips:
 
 If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that is put
 into the root OmniFocus projects.
-*/
+**********************************************************************************************/
 
 
 /*
