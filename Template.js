@@ -33,6 +33,9 @@ Tips:
 - You can leave your template project template paused in OmniFocus to avoid clutter, the expanded project will be active.
 - Add taskpaper directives to the end of a line like @due(+1d).
 - Make tags a variable with @tags(${TAG})
+
+If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that is put
+into the root OmniFocus projects.
 */
 
 
