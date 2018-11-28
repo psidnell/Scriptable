@@ -4,9 +4,12 @@
 
 /*
 TODO
-- send lines to Omnifocus
-- handle pre-defined variables
-- final alert on entry
+- handle pre-defined variables like workflow:
+  DATE
+  TIME
+  DAY
+  HERE
+- tidy, comments and license
 */
 function processLine(line, variables) {
     let variableNames = Object.keys(variables);
@@ -44,7 +47,7 @@ async function getVariableValues(variableNames) {
     for (let i = 0; i < variableNames.length; i++) {
         let variableName = variableNames[i];
         let alert = new Alert();
-        alert.message = 'Value for "' + variableName + '"';
+        alert.message = variableName;
         alert.addTextField('value')
         alert.addAction('OK');
         let promise = alert.presentAlert();
@@ -53,6 +56,30 @@ async function getVariableValues(variableNames) {
         variables[variableName] = value;
     }
     return variables;
+}
+
+function handleErr(val) {
+    console.error(val);
+}
+
+// Create an Omnifocus entry
+function createEntry(project, taskpaper) {
+    let url = new CallbackURL('omnifocus://x-callback-url/paste');
+    url.addParameter('target', project);
+    url.addParameter('content', taskpaper);
+
+    // Confirmation alert
+    let alert = new Alert();
+    alert.title = 'Expand OmniFocus Template';
+    alert.message = 'To ' + project;
+    alert.addAction('OK');
+    alert.addCancelAction('Cancel');
+    alert.present().then((selId) => {
+        if (selId === 0) {
+            console.log(url.getURL())
+            url.open();
+        }
+    }, handleErr);
 }
 
 function expand(text) {
@@ -73,22 +100,26 @@ function expand(text) {
                 }
                 
                 console.log(buffer);
+                createEntry(project, buffer)
             }
         }
     });
 }
 
-//expand(args.plainTexts[0]);
-expand(
-'- Test Template<<Home>> @parallel(true) @autodone(true) @context(/dev/null) @tags(/dev/null)\n' + 
-'	- This is a thing that tests expansion. It uses ${VAR} and all built in variables @parallel(true) @autodone(false) @context(🏠 : AT HOME 🏠) @tags(🏠 : AT HOME 🏠)\n' +
-'		${VAR}\n' + 
-'		\n' +
-'		${DATE}\n' +
-'		\n' +
-'		${TIME}\n' +
-'		\n' +
-'		${DAY}\n' +
-'		\n' +
-'		${HERE}\n');
-
+if (args && args.plainTexts.length > 0) {
+    expand(args.plainTexts[0]);
+} else {
+    expand(
+        '- Test Template<<projects>> @parallel(true) @autodone(true) @context(/dev/null) @tags(/dev/null)\n' + 
+        '	- This is a thing that tests expansion. It uses ${VAR} and all built in variables @parallel(true) @autodone(false) @context(🏠 : AT HOME 🏠) @tags(🏠 : AT HOME 🏠)\n' +
+        '		${VAR}\n' + 
+        '		\n' +
+        '		${DATE}\n' +
+        '		\n' +
+        '		${TIME}\n' +
+        '		\n' +
+        '		${DAY}\n' +
+        '		\n' +
+        '		${HERE}\n'
+    );
+}
