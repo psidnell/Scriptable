@@ -31,10 +31,15 @@ sent back to OmniFocus with the values expanded.
 
 The first line (e.g. the project name) must contain some special text enclosed in <<...>> e.g:
 
-    My Template Project<<Folder>>
+    My Template Project<<Target>>
 
-Folder is the name of the folder into which the final project will be placed. No folder path is necessary,
-"inbox" or "projects" may be used.
+Target is the name of the folder/project into which the final tasks will be placed.
+Valid targets are (https://inside.omnifocus.com/url-schemes):
+- inbox
+- projects
+- /task/MyProject
+- /folder/Myfolder
+- /folder/MyFolder : SubFolder
 
 Variable usage in the template project is of the form:
 
@@ -64,6 +69,7 @@ into the root OmniFocus projects.
 
 /*
 TODO
+- Open expanded template in Omnifocus when finished
 - handle pre-defined variables like workflow:
   HERE not getting address yet
 - tidy, comments and license
