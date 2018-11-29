@@ -14,4 +14,6 @@ Some configuration options exist in the script itself.
 
 Expands variables into template projects shared from OmniFocus and sends them back as TaskPaper.
 
+Full instructions in the script.
+
 ![Template](Template.jpg)
