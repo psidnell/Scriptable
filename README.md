@@ -64,7 +64,7 @@ Note: If the script is run directly from Scriptable (i.e. with no shared templat
 An example template project is:
 
 ```
-- Test Template expanded on ${DAY}`<<projects>>` @parallel(true) @autodone(true) @flagged
+- Test Template expanded on ${DAY}<<projects>> @parallel(true) @autodone(true) @flagged
 	- Task 1 uses ${VAR} and all built in variables in a note expanded at ${TIME}
 		Task note demonstrating all variable types
 		${VAR}
@@ -93,6 +93,10 @@ When this is shared to Template.js, it promts for a value for ${VAR} and send th
 	- Task 2 expanded at 22:15
 ```
 
-Remember to share the project itself to Template.js via the Scriptable action extension:
+Remember to share the project itself:
+
+![ShareProject](ShareProject.jpg)
+
+Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
