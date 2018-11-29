@@ -20,32 +20,23 @@
  */
 
 // V1.0.4
-
-/**********************************************************************************************
-Developed on iOS with:
-- Scriptable (https://scriptable.app/)
-- WorkingCopy (https://workingcopyapp.com)
-
-A script that opens a list of upcoming iOS calendar events
-and creates OmniFocus events for those selected. Multi-day events get two OmniFocus events
-created, one for the start day, one for the end day.
-
-Below are some constants you'll likely want to edit for your OmniFocus/Calendar setup.
-**********************************************************************************************/
+// https://github.com/psidnell/Scriptable
 
 // Number of days to show in the picker
 DAYS_TO_SHOW = 64;
 
-// The default project for creating OmniFocus events
+// The default project path for creating OmniFocus events for example this is /Home/Calendar/Calendar
 DEFAULT_PROJECT = ['Home', 'Calendar', 'Calendar'].join(' : ');
 
-// Here you can create mappings so that different calendars create Omnifocus events in different projects
+// Here you can create mappings so that different calendars create Omnifocus events in different projects.
+// for example this maps the Calendar called "Calendar" onto the project "Work/Calendar".
 const PROJECT_MAP = {
     'Calendar': ['Work','Calendar'].join(' : ')
 };
 
 // Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
 // Here you can add translations from the real name to an alternate one that will be used in the UI.
+// This translates the calendar titled "Calendar" to "Work".
 const CALENDAR_TITLE_MAP = {
     'Calendar': 'Work'
 };

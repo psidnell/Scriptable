@@ -19,55 +19,7 @@
  */
 
 // V1.0.0
-
-/**********************************************************************************************
-Developed on iOS with:
-- Scriptable (https://scriptable.app/)
-- WorkingCopy (https://workingcopyapp.com)
-
-This script is an action extension that expects to receive a project, task or task group shared from OmniFocus.
-The source can contain variables and the script will prompt or use built-in values. Finally the resultant project is
-sent back to OmniFocus with the values expanded.
-
-The first line (e.g. the project name) must contain some special text enclosed in <<...>> e.g:
-
-    My Template Project<<Target>>
-
-Target is the name of the folder/project into which the final tasks will be placed.
-Valid targets are (https://inside.omnifocus.com/url-schemes):
-- inbox
-- projects
-- /task/MyProject
-- /folder/Myfolder
-- /folder/MyFolder : SubFolder
-
-Variable usage in the template project is of the form:
-
-${VARNAME}
-
-The script will pop up a dialog asking for the value when it runs.
-
-Special variables that are filled automatically are:
-
-- ${DATE} - 03 October 2018
-- ${TIME} - 08:44
-- ${DAY} - Saturday
-- ${MONTH} - November
-- ${YEAR} - 2018
-- ${HERE} - current location, which takes a few seconds to acquire
-
-Tips:
-
-- You can leave your template project template paused in OmniFocus to avoid clutter, the expanded project will be active.
-- Add taskpaper directives to the end of a line like @due(+1d).
-- Make tags a variable with @tags(${TAG})
-
-Testing:
-
-If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that
-puts the expanded project into the OmniFocus projects root.
-**********************************************************************************************/
-
+// https://github.com/psidnell/Scriptable
 
 /*
 TODO
