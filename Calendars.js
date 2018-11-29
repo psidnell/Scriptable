@@ -51,7 +51,9 @@ const CALENDAR_TITLE_MAP = {
 };
 
 // There are some calendars we just want to ignore, I have a duplicate holidays calendar in exchange.
-const CALENDARS_TO_IGNORE = new Set(['United Kingdom holidays']); 
+const CALENDARS_TO_IGNORE = new Set([
+    'United Kingdom holidays'
+]); 
 
 // Whole bunch of little date formatting functions
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
