@@ -6,7 +6,7 @@ Presents a calendar picker and creates OmniFocus tasks from selected events.
 
 Can be used stand alone on an iPhone or in split view (for example with the OmniFocus app) on an iPad.
 
-![Calendars.png](Calendars.png)
+![Calendars](Calendars.jpg)
 
 Some configuration options exist in the script itself.
 
