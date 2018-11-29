@@ -226,24 +226,37 @@ function addTitleRow(uiTable, text) {
 }
 
 // Create a row for an event
-function addRow(uiTable, dateText, eventText, subText) {
-    let uiTableRow = new UITableRow();
+function addRow(table, dateText, eventText, subText, colour) {
+    const rowHeight = 70;
+    let row = new UITableRow();
 
     // The split seems OK on the narrowest ipad split view
-    let cell1 = uiTableRow.addText(dateText);
-    cell1.widthWeight = 20;
+    
+    let width = 16;
+    let height = rowHeight;
+    let c = new DrawContext()
+    c.size = new Size(width, height)
+    c.setFillColor(colour)
+    c.fill(new Rect(0, 0 , width, height));
+    
+    let cell1 = row.addImage(c.getImage());
+    cell1.widthWeight = 5;
     cell1.leftAligned();
-
-    let cell2 = uiTableRow.addText(eventText, subText);
-    cell2.widthWeight = 80;
+    
+    let cell2 = row.addText(dateText);
+    cell2.widthWeight = 20;
     cell2.leftAligned();
 
-    uiTableRow.height = 70;
-    uiTableRow.cellSpacing = 10;
-    uiTableRow.dismissOnSelect = false;
-    uiTableRow.isHeader = false;
-    uiTable.addRow(uiTableRow);
-    return uiTableRow;
+    let cell3 = row.addText(eventText, subText);
+    cell3.widthWeight = 75;
+    cell3.leftAligned();
+
+    row.height = rowHeight;
+    row.cellSpacing = 10;
+    row.dismissOnSelect = false;
+    row.isHeader = false;
+    table.addRow(row);
+    return row;
 }
 
 function handleCalendarEvents(events) {
@@ -252,6 +265,7 @@ function handleCalendarEvents(events) {
     for (let i = 0; i < events.length; i++) {
         let event = events[i];
         let eventDate = formatNiceDate(event.startDate);
+        let colour = event.calendar.color;
 
         // Date Header
         if (eventDate !== lastEventDate) {
@@ -269,7 +283,7 @@ function handleCalendarEvents(events) {
             time = getHHMM(event.startDate);
         }
 
-        addRow(uiTable, time, event.title, subText).onSelect = (selIndex) => {
+        addRow(uiTable, time, event.title, subText, colour).onSelect = (selIndex) => {
             handleSelectedEvent(event);
         };
 
