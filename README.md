@@ -5,7 +5,7 @@ Developed on iOS with:
 - [Scriptable](https://scriptable.app/)
 - [WorkingCopy](https://workingcopyapp.com)
 
-## Calendars.js
+## [Calendars.js](Calendars.js)
 
 Presents a calendar picker and creates OmniFocus tasks from selected events, preserving the start time (as the due time), notes and attendees. By default the task is deferred to 00:00 of the day of the calendar event.
 
@@ -20,7 +20,7 @@ Some configuration options exist in the script itself for:
 
 ![Calendars](Calendars.jpg)
 
-## Template.js
+## [Template.js](Template.js)
 
 This script is an action extension that expects to receive a project, task or task group shared from OmniFocus. The source can contain variables and the script will prompt for values or use built-in values.
 
@@ -28,7 +28,7 @@ Finally the resultant project is sent back to OmniFocus with the values expanded
 
 The first line (e.g. the project) must contain some special text enclosed in `<<...>>` e.g:
 
-    My Template Project`<<Target>>`
+    My Template Project<<Target>>
 
 Where “Target” is the name of the folder/project into which the final tasks will be placed.
 Valid targets are described [here](https://inside.omnifocus.com/url-schemes), for example:
@@ -51,7 +51,7 @@ Special variables that are filled automatically are:
 - ${DAY} - Saturday
 - ${MONTH} - November
 - ${YEAR} - 2018
-- ${HERE} - current location, which takes a few seconds to acquire, currently generates a maps url
+- ${HERE} - present location, which takes a few seconds to acquire, currently generates a maps url.
 
 Tips:
 
@@ -59,17 +59,13 @@ Tips:
 - Add taskpaper directives to tasks at the end of a line like @due(+1d).
 - Make tags a variable with @tags(${TAG}).
 
-Testing:
-
-If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that
-puts the expanded project into the OmniFocus projects root.
-Expands variables into template projects shared from OmniFocus and sends them back as TaskPaper.
+Note: If the script is run directly from Scriptable (i.e. with no shared template as input) it will use a test template that puts the expanded project into the OmniFocus projects root.
 
 An example template project is:
 
 ```
 - Test Template expanded on ${DAY}`<<projects>>` @parallel(true) @autodone(true) @flagged
-	- Task 1 uses ${VAR} and all built in variables in a note expanded at ${TIME} @parallel(true) @autodone(false)
+	- Task 1 uses ${VAR} and all built in variables in a note expanded at ${TIME}
 		Task note demonstrating all variable types
 		${VAR}
 		${DATE}
@@ -78,14 +74,14 @@ An example template project is:
 		${MONTH}
 		${YEAR}
 
-	- Task 2 expanded at ${TIME} @parallel(true) @autodone(false)
+	- Task 2 expanded at ${TIME}
 ```
 
 When this is shared to Template.js, it promts for a value for ${VAR} and send the following back to OmniFocus:
 
 ```
 - Test Template expanded on Thursday @parallel(true) @autodone(true) @flagged
-	- Task 1 uses My Text and all built in variables in a note expanded at 22:15 @parallel(true) @autodone(false)
+	- Task 1 uses My Text and all built in variables in a note expanded at 22:15
 		Task note demonstrating all variable types
 		My Text
 		29 November 2018
@@ -94,7 +90,7 @@ When this is shared to Template.js, it promts for a value for ${VAR} and send th
 		November
 		2018
 
-	- Task 2 expanded at 22:15 @parallel(true) @autodone(false)
+	- Task 2 expanded at 22:15
 ```
 
 Remember to share the project itself to Template.js via the Scriptable action extension:
