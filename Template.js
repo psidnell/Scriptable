@@ -54,7 +54,7 @@ Special variables that are filled automatically are:
 - ${DAY} - Saturday
 - ${MONTH} - November
 - ${YEAR} - 2018
-- ${HERE} - current address
+- ${HERE} - current location, which takes a few seconds to acquire
 
 Tips:
 
@@ -159,7 +159,7 @@ async function getVariableValues(variableNames) {
             let value = 'http://maps.apple.com/?daddr=' + location.latitude + ',' + location.longitude;
             variables[variableName] = value;
         } else {
-            // Not a predifined variable, as the user
+            // Not a predifined variable, ask the user
             let alert = new Alert();
             alert.message = variableName;
             alert.addTextField('value')
@@ -236,7 +236,7 @@ function expand(text) {
     });
 }
 
-// Open the shared template if provided or a test one if run directly from scriptable)
+// Open the shared template if provided or a test one if run directly from scriptable.
 if (args && args.plainTexts.length > 0) {
     expand(args.plainTexts[0]);
 } else {
@@ -253,8 +253,9 @@ if (args && args.plainTexts.length > 0) {
         '		\n' +
         '		${MONTH}\n' + 
         '		\n' +
-        '		${YEAR}\n' + 
-        '		\n' +
-        '		${HERE}\n'
+        '		${YEAR}\n'
+        // Slow:
+        //'		\n' +
+        //'		${HERE}\n'
     );
 }
