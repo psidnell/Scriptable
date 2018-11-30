@@ -130,3 +130,7 @@ Remember to share the project itself with the OmniFocus share button:
 Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
+
+----
+
+Keywords: Scriptable, Calendar, TaskPaper, Template, Automation, iOS, iPhone, iPad
