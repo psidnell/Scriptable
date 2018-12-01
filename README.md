@@ -135,7 +135,7 @@ Then select Template via the Scriptable action extension:
 
 ## [Map URL - Expand And Share](Map%20URL%20-%20Expand%20And%20Share.js)
 
-Accepts a location (URL) shared from iOS maps, expands it to something useful and then re-sharing.
+Accepts a location (URL) shared from iOS maps, expands it to something more useful and then re-sharing the text.
 
 For example, when presented with a URL like this:
 
