@@ -39,6 +39,7 @@ let appleMapsUrl = args.urls[0];
 let dict = decodeUrlParams(appleMapsUrl);
 
 let address = '';
+
 if (dict['address']) {
     let lines = dict['address'].split(',');
     for (let i = 0; i < lines.length; i++) {
@@ -50,6 +51,6 @@ if (dict['address']) {
 let latLong = dict['ll'];
 let googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + latLong;
 
-let pasteData = [address, appleMapsUrl, googleMapsUrl].join('\n\n');
+let pasteData = [address, appleMapsUrl, googleMapsUrl, 'coordinates: ' + latLong].join('\n\n');
 
 ShareSheet.presentAndWait([pasteData]);

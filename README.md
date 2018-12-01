@@ -140,20 +140,23 @@ Accepts a location (URL) shared from iOS maps, expands it to something useful an
 For example, when presented with a URL like this:
 
 ```
-https://maps.apple.com/?address=Upper%20Maudlin%20Street,%20Bristol,%20BS2%208HW,%20England&auid=15540519956471189485&ll=51.459209,-2.596757&lsp=9902&q=Bristol%20Royal%20Infirmary&_ext=ChkKBQgEEOEBCgQIBRADCgQIBhAKCgQIChAAEiQpgp4XKUC6SUAxGMLTzPzTBMA5AHQ9hWa7SUBBZo19zXW2BMA%3D&t=m
+https://maps.apple.com/?address=Bristol%20Royal%20Infirmary,%20Alfred%20Parade,%20Bristol,%20BS2,%20England&ll=51.459409,-2.596540&q=Marked%20Location&_ext=EiQpQapHnkmvSUAxwPoTqirtBcA5mL1Pb0zGSUBBQNOQZ0KeA8A%3D&t=m
 ```
 
 It expands to to some more useful text containing the address and URLs for apple and google maps:
 
 ```
-Upper Maudlin Street
+Bristol Royal Infirmary
+Alfred Parade
 Bristol
-BS2 8HW
+BS2
 England
 
-https://maps.apple.com/?address=Upper%20Maudlin%20Street,%20Bristol,%20BS2%208HW,%20England&auid=15540519956471189485&ll=51.459209,-2.596757&lsp=9902&q=Bristol%20Royal%20Infirmary&_ext=ChkKBQgEEOEBCgQIBRADCgQIBhAKCgQIChAAEiQpgp4XKUC6SUAxGMLTzPzTBMA5AHQ9hWa7SUBBZo19zXW2BMA%3D&t=m
+https://maps.apple.com/?address=Bristol%20Royal%20Infirmary,%20Alfred%20Parade,%20Bristol,%20BS2,%20England&ll=51.459409,-2.596540&q=Marked%20Location&_ext=EiQpQapHnkmvSUAxwPoTqirtBcA5mL1Pb0zGSUBBQNOQZ0KeA8A%3D&t=m
 
-https://www.google.com/maps/search/?api=1&query=51.459209,-2.596757
+https://www.google.com/maps/search/?api=1&query=51.459409,-2.596540
+
+coordinates: 51.459409,-2.596540
 ```
 ## [Map URL - Open In Google Maps](Map%20URL%20-%20Open%20In%20Google%20Maps.js)
 
