@@ -131,6 +131,29 @@ Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
 
+## [Map URL - Expand to Pasteboard](Map URL - Expand to Pasteboard.js)
+
+Accepts a URL shared from iOS maps, expands it to something useful leaving the result in the paste buffer.
+
+For example, when presented with a URL like this:
+
+```
+https://maps.apple.com/?address=Upper%20Maudlin%20Street,%20Bristol,%20BS2%208HW,%20England&auid=15540519956471189485&ll=51.459209,-2.596757&lsp=9902&q=Bristol%20Royal%20Infirmary&_ext=ChkKBQgEEOEBCgQIBRADCgQIBhAKCgQIChAAEiQpgp4XKUC6SUAxGMLTzPzTBMA5AHQ9hWa7SUBBZo19zXW2BMA%3D&t=m
+```
+
+It expands to to some more useful text containing the address and URLs for apple and google maps:
+
+```
+Upper Maudlin Street
+Bristol
+BS2 8HW
+England
+
+https://maps.apple.com/?address=Upper%20Maudlin%20Street,%20Bristol,%20BS2%208HW,%20England&auid=15540519956471189485&ll=51.459209,-2.596757&lsp=9902&q=Bristol%20Royal%20Infirmary&_ext=ChkKBQgEEOEBCgQIBRADCgQIBhAKCgQIChAAEiQpgp4XKUC6SUAxGMLTzPzTBMA5AHQ9hWa7SUBBZo19zXW2BMA%3D&t=m
+
+https://www.google.com/maps/search/?api=1&query=51.459209,-2.596757
+```
+
 ----
 
-Keywords: Scriptable, Calendar, TaskPaper, Template, Automation, iOS, iPhone, iPad
+Keywords: Scriptable, Calendar, TaskPaper, Template, Automation, iOS, iPhone, iPad, Maps
