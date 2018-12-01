@@ -131,7 +131,7 @@ Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
 
-## [Map URL - Expand to Pasteboard](Map URL - Expand to Pasteboard.js)
+## [Map URL - Expand to Pasteboard](Map%20URL%20-%20Expand%20to%20Pasteboard.js)
 
 Accepts a URL shared from iOS maps, expands it to something useful leaving the result in the paste buffer.
 
