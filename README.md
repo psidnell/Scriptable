@@ -133,7 +133,7 @@ Then select Template via the Scriptable action extension:
 
 ## [Map URL - Expand to Pasteboard](Map%20URL%20-%20Expand%20to%20Pasteboard.js)
 
-Accepts a URL shared from iOS maps, expands it to something useful leaving the result in the paste buffer.
+Accepts a location (URL) shared from iOS maps, expands it to something useful leaving the result in the paste buffer.
 
 For example, when presented with a URL like this:
 
@@ -153,6 +153,9 @@ https://maps.apple.com/?address=Upper%20Maudlin%20Street,%20Bristol,%20BS2%208HW
 
 https://www.google.com/maps/search/?api=1&query=51.459209,-2.596757
 ```
+## [Map URL - Open In Google Maps](Map%20URL%20-%20Open%20In%20Google%20Maps.js)
+
+Accepts a location (URL) shared from iOS maps and opens it in google maps.
 
 ----
 
