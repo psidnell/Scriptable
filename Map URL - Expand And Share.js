@@ -1,7 +1,7 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
-// icon-color: blue; icon-glyph: location-arrow;
-// share-sheet-inputs: url;
+// always-run-in-app: true; icon-color: blue;
+// icon-glyph: location-arrow; share-sheet-inputs: url;
 
 /*
  * Copyright 2018 Paul Sidnell
@@ -52,6 +52,4 @@ let googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + latLong
 
 let pasteData = [address, appleMapsUrl, googleMapsUrl].join('\n\n');
 
-Pasteboard.copyString(pasteData);
-
-console.log('Location data in paste buffer');
+ShareSheet.presentAndWait([pasteData]);

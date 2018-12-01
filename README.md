@@ -5,6 +5,8 @@ Developed on iOS with:
 - [Scriptable](https://scriptable.app/)
 - [WorkingCopy](https://workingcopyapp.com)
 
+
+
 ## [Calendars.js](Calendars.js)
 
 I prefer to import Calendar events into OmniFocus as tasks and work with those since I like to add my own notes,
@@ -131,9 +133,9 @@ Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
 
-## [Map URL - Expand to Pasteboard](Map%20URL%20-%20Expand%20to%20Pasteboard.js)
+## [Map URL - Expand And Share](Map%20URL%20-%20Expand%20And%20Share.js)
 
-Accepts a location (URL) shared from iOS maps, expands it to something useful leaving the result in the paste buffer.
+Accepts a location (URL) shared from iOS maps, expands it to something useful and then re-sharing.
 
 For example, when presented with a URL like this:
 
