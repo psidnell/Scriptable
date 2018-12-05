@@ -95,8 +95,7 @@ function display(info) {
         info.address,
         info.appleMapsUrl,
         info.googleMapsUrl,
-        info.wazeUrl,
-        'coordinates: ' + info.ll
+        info.wazeUrl
     ];
     
     addRow(uiTable, "Location Details Extracted", true);
