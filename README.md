@@ -133,34 +133,18 @@ Then select Template via the Scriptable action extension:
 
 ![Template](Template.jpg)
 
-## [Map URL - Expand And Share](Map%20URL%20-%20Expand%20And%20Share.js)
+## [Maps](Maps.js)
 
-Accepts a location (URL) shared from iOS maps, expands it to something more useful and then re-sharing the text.
+Accepts a location (URL) shared from iOS maps, and expands it to something more useful:
 
-For example, when presented with a URL like this:
+- The full address
+- Maps links for Apple Maps, Google Maps and Waze
 
-```
-https://maps.apple.com/?address=Bristol%20Royal%20Infirmary,%20Alfred%20Parade,%20Bristol,%20BS2,%20England&ll=51.459409,-2.596540&q=Marked%20Location&_ext=EiQpQapHnkmvSUAxwPoTqirtBcA5mL1Pb0zGSUBBQNOQZ0KeA8A%3D&t=m
-```
+It displays the information and then provides options to:
 
-It expands to to some more useful text containing the address and URLs for apple and google maps:
-
-```
-Bristol Royal Infirmary
-Alfred Parade
-Bristol
-BS2
-England
-
-https://maps.apple.com/?address=Bristol%20Royal%20Infirmary,%20Alfred%20Parade,%20Bristol,%20BS2,%20England&ll=51.459409,-2.596540&q=Marked%20Location&_ext=EiQpQapHnkmvSUAxwPoTqirtBcA5mL1Pb0zGSUBBQNOQZ0KeA8A%3D&t=m
-
-https://www.google.com/maps/search/?api=1&query=51.459409,-2.596540
-
-coordinates: 51.459409,-2.596540
-```
-## [Map URL - Open In Google Maps](Map%20URL%20-%20Open%20In%20Google%20Maps.js)
-
-Accepts a location (URL) shared from iOS maps and opens it in google maps.
+- Open the address in any of the above maps apps
+- Copy the info to the paste buffer
+- Share the info via the share sheet
 
 ----
 
