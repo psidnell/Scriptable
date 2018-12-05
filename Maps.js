@@ -54,7 +54,8 @@ function processAppleUrl(appleMapsUrl, dict) {
         ll: latLong,
         address: address,
         appleMapsUrl: appleMapsUrl,
-        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + latLong
+        googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + latLong,
+        wazeUrl: 'https://waze.com/ul?ll=' + latLong
     };
 }
 
@@ -94,6 +95,7 @@ function display(info) {
         info.address,
         info.appleMapsUrl,
         info.googleMapsUrl,
+        info.wazeUrl,
         'coordinates: ' + info.ll
     ];
     
@@ -109,6 +111,10 @@ function display(info) {
     
     addButton(uiTable, 'Open in Google Maps', () => {
         Safari.open(info.googleMapsUrl);
+    });
+    
+    addButton(uiTable, 'Open in Waze', () => {
+        Safari.open(info.wazeUrl);
     });
     
     addButton(uiTable, 'Share Formatted Location', () => {
@@ -146,7 +152,7 @@ if (args.urls && args.urls.length > 0) {
             let location = Location.current();
             location.then((locData) => {
                 let ll = locData.latitude + ',' + locData.longitude;
-                let url = 'https://maps.apple.com/?ll=' + ll;
+                let url = 'https://maps.apple.com/?ll=' + ll + '&t=m';
                 let dict = decodeUrlParams(url);
                 info = processAppleUrl(url, dict);
                 display(info);
