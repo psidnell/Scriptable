@@ -135,14 +135,23 @@ if (args.urls && args.urls.length > 0) {
         display(info);
     }
 } else {
-    console.log('Getting location...');
-    let location = Location.current();
-    location.then((locData) => {
-        // returns {"verticalAccuracy":4,"longitude":xxxxx,"latitude":yyyyy,"horizontalAccuracy":10,"altitude":45.898406982421875}
-        let ll = locData.latitude + ',' + locData.longitude;
-        let url = 'https://maps.apple.com/?ll=' + ll;
-        let dict = decodeUrlParams(url);
-        info = processAppleUrl(url, dict);
-        display(info);
+    let alert = new Alert();
+    alert.title = 'Use Current Location?';
+    alert.message = 'Will take several seconds';
+    alert.addAction('Yes');
+    alert.addCancelAction('Cancel');
+    alert.presentAlert().then((opt) => {
+        if (opt == 0) {
+            console.log('Fetching location...');
+            let location = Location.current();
+            location.then((locData) => {
+                let ll = locData.latitude + ',' + locData.longitude;
+                let url = 'https://maps.apple.com/?ll=' + ll;
+                let dict = decodeUrlParams(url);
+                info = processAppleUrl(url, dict);
+                display(info);
+            });
+        }
     });
+    
 }
