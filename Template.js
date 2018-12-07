@@ -160,7 +160,6 @@ async function createEntry(target, taskpaper) {
 
 // Expand the template, open in OmniFocus
 function expand(text) {
-    let expanded = false;
     let variableNames = extractVariables(text);
     // console.log('Variable names extracted: ' + variableNames);
     getVariableValues(variableNames).then((variables) => {
@@ -184,14 +183,9 @@ function expand(text) {
                         Safari.open(taskUrl);
                     }
                 });
-                expanded = true;
             }
         }
     });
-    if (!expanded) {
-        console.error('Could not expand text - correctly formatted?');
-        console.error(text);
-    }
 }
 
 // Open the shared template if provided or a test one if run directly from scriptable.
