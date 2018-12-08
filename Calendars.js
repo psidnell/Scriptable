@@ -162,16 +162,15 @@ async function handleSelectedEvent(event) {
     // Create the event(s) in OmniFocus
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
-        let promise = createEntry({
+        await createEntry({
             name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
             due: start,
             defer: start,
             note: note
         });
-        await promise;
         // Multi day event - end day
-        createEntry({
+        await createEntry({
             name: title + ' ends ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
             due: end,
@@ -182,7 +181,7 @@ async function handleSelectedEvent(event) {
         // All day event for a single day
         let due = formatOFDate(event.startDate);
         let defer = formatOFDate(event.startDate);
-        createEntry({
+        await createEntry({
             name: title + ' ' + formatNiceDate(event.startDate),
             project: projectForCalendar,
             due: due,
@@ -193,7 +192,7 @@ async function handleSelectedEvent(event) {
         // Simple event with time
         let due = formatOFDateTime(event.startDate);
         let defer = formatOFDate(event.startDate);
-        createEntry({
+        await createEntry({
             name: title + ' ' + formatNiceDateTime(event.startDate),
             project: projectForCalendar,
             due: due,
