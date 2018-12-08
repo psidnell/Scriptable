@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-// V1.0.4
+// V1.0.5
 // https://github.com/psidnell/Scriptable
 
 // Number of days to show in the picker
