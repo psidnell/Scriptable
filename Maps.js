@@ -157,6 +157,5 @@ if (args.urls && args.urls.length > 0) {
                 display(info);
             });
         }
-    });
-    
+    });   
 }

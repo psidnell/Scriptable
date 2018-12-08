@@ -98,7 +98,7 @@ function handleErr(val) {
 }
 
 // Create an Omnifocus entry
-function createEntry(data) {
+async function createEntry(data) {
     let url = new CallbackURL('omnifocus:///add');
     url.addParameter('name', data.name);
     url.addParameter('project', data.project);
@@ -115,11 +115,10 @@ function createEntry(data) {
     alert.message = 'Task: "' + data.name + '"\nProject: "' + data.project + '"';
     alert.addAction('OK');
     alert.addCancelAction('Cancel');
-    alert.present().then((selId) => {
-        if (selId === 0) {
-            url.open();
-        }
-    }, handleErr);
+    let selId = await (alert.present());
+    if (selId === 0) {
+        url.open();
+    }
 }
 
 // True if the event is a multi-day all day event
@@ -139,7 +138,7 @@ function isAllDayAndSingleDay(event) {
 }
 
 // Process an event that has been selected for addition to OmniFocus
-function handleSelectedEvent(event) {
+async function handleSelectedEvent(event) {
     let altCalendarName = getAlternateCalendarName(event.calendar.title);
     let title = event.title;
     let projectForCalendar = getProjectFromCalendar(event.calendar.title);
@@ -163,13 +162,14 @@ function handleSelectedEvent(event) {
     // Create the event(s) in OmniFocus
     if (isAllDayAndMultiDay(event)) {
         // Multi day event - start day
-        createEntry({
+        let promise = createEntry({
             name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
             due: start,
             defer: start,
             note: note
         });
+        await promise;
         // Multi day event - end day
         createEntry({
             name: title + ' ends ' + formatNiceDate(event.endDate),
