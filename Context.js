@@ -1,9 +1,22 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: teal; icon-glyph: magic;
+// Example match value: 'Home,Weekday,Fri,am,Morning,09'
+// The first match is used
 const RULES = [
-    { match: '.*,.*,Fri,pm,.*,.*', shortcuts: ['Take Coat'] },
-    { match: '.*,.*,Fri,.*,.*,.*', shortcuts: ['Take Coat'] }
+
+{title: 'Before Work',
+match: 'Home,Weekday,.*,.*,(Early|Morning),.*',
+shortcuts: ['Take Coat']},
+
+{title: '???',
+match: '.*,.*,Fri,.*,.*,.*',
+shortcuts: ['Take Coat2']},
+
+// Default rule
+{title: 'Default',
+match: '.*',
+shortcuts: ['Fall Through']}
 ];
     
 const CONTEXTS = {
@@ -74,18 +87,17 @@ function getTime() {
     return dayType + ',' + day + ',' + amPm + ',' + hourType + ',' + hour;
 }
 
-function getShortcuts(key) {
-    let shortcuts = [];
+function getRule(key) {
+    let rule = null;
 
     for (let i = 0; i < RULES.length; i++) {
-        //let key = /.*,.*,Fri,.*,.*,.*/;
         let match = key.match(RULES[i].match);
         if (match) {
-            shortcuts = RULES[i].shortcuts;
+            rule = RULES[i];
             break;
         }
     }
-    return shortcuts;
+    return rule;
 }
 
 function getShortcutsKey() {
@@ -98,15 +110,17 @@ function getShortcutsKey() {
 }
 
 let key = getShortcutsKey();
-let shortcuts = getShortcuts(key);
+console.log(key);
+let rule = getRule(key);
 
 let table = new UITable();
 let titleRow = new UITableRow();
-titleRow.addText(key);
+titleRow.addText(rule.title);
 titleRow.isHeader = true;
 titleRow.dismissOnSelect = false;
 table.addRow(titleRow);
 
+let shortcuts = rule.shortcuts;
 for (let i = 0; i < shortcuts.length; i++) {
     let shortcut = shortcuts[i];
     let row = new UITableRow();
@@ -123,7 +137,5 @@ for (let i = 0; i < shortcuts.length; i++) {
 
 table.present();
 
-
-// todo - show menu
 // todo cache location or ask
 // pass location in from NFC

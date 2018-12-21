@@ -2,9 +2,13 @@
 // These must be at the very top of the file. Do not edit.
 // icon-color: blue; icon-glyph: magic;
 // If the first word (lower case) matches the key, then put the item in the named project
+// otherwise it's added to the inbox
+
 const PROJECT_MAPPING = {
     'shopping' : 'Shopping',
     'buy' : 'Shopping'
+    'work' : 'Work : Misc',
+    'home' : 'Home : Misc'
 };
     
 async function listen() {
@@ -17,7 +21,7 @@ async function listen() {
         // See of the first word is a project
         let project = PROJECT_MAPPING[firstWord];
         
-        // If it is remove it from the text
+        // If it is then remove it from the text but add to that project
         if (project) {
             dictation = words.slice(1).join(' ');
         }
@@ -58,10 +62,9 @@ async function listen() {
     }
 }
 
-// Keep running until the user quits or the dictation is blank
+// Keep running until the user quits
 async function go() {
-    while (await listen()) {
-    }
+    while (await listen()) {}
 }
 
 go();
