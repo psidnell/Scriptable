@@ -17,9 +17,8 @@ perspectives: [
 'Evening']},
 
 // Default rule
-{title: 'Default',
-match: '.*',
-shortcuts: ['Fall Through']}
+{title: 'Nothing Found',
+match: '.*'}
 ];
     
 const CONTEXTS = {
@@ -120,18 +119,48 @@ function getRule(key) {
 }
 
 async function getShortcutsKey(useGeo) {
-    let context = await getContext(false);
+    let context = await getContext(useGeo);
     let time = getTime();
     let key = context + ',' + time;
     return key;
 }
 
-let key = await getShortcutsKey(false);
+function createLauncherRow(text, fn) {
+    let row = new UITableRow();
+    row.dismissOnSelect = false;
+    let cell = row.addText(text);
+    row.onSelect = fn;
+    return row;
+}
+
+function getInput(argName) {
+    let params = URLScheme.allParameters();
+    let value = params[argName];
+    if (value) {
+        return decodeURIComponent(params[argName]);
+    } else {
+        return null;
+    }
+}
+
+// Load url parameters
+let useGeo = getInput('geo') === 'true';
+let context = getInput('context');
+
+let key = null;
+if (context && context.length > 0 && !useGeo) {
+    setContext(context);
+    key = await getShortcutsKey();
+} else {
+    key = await getShortcutsKey(useGeo);
+}
+
+console.log(key);
 let rule = getRule(key);
 
 let table = new UITable();
 let titleRow = new UITableRow();
-titleRow.addText(rule.title);
+titleRow.addText(rule.title + ' (' + key + ')');
 titleRow.isHeader = true;
 titleRow.dismissOnSelect = false;
 table.addRow(titleRow);
@@ -140,14 +169,11 @@ let shortcuts = rule.shortcuts;
 if (shortcuts && shortcuts.length > 0) {
     for (let i = 0; i < shortcuts.length; i++) {
         let shortcut = shortcuts[i];
-        let row = new UITableRow();
-        row.dismissOnSelect = false;
-        let cell = row.addText(shortcut);
-        row.onSelect = (selIndex) => {
+        let row = createLauncherRow(shortcut, (selIndex) => {
             let url = new CallbackURL('shortcuts://run-shortcut');
             url.addParameter('name', shortcut);
             url.open();
-        };
+        });
         table.addRow(row);
     }
 }
@@ -156,18 +182,12 @@ let perspectives = rule.perspectives;
 if (perspectives && perspectives.length > 0) {
     for (let i = 0; i < perspectives.length; i++) {
         let perspective = perspectives[i];
-        let row = new UITableRow();
-        row.dismissOnSelect = false;
-        let cell = row.addText(perspective);
-        row.onSelect = (selIndex) => {
+        let row = createLauncherRow(perspective, (selIndex) => {
             let url = 'omnifocus:///perspective/' + encodeURI(perspective);
             Safari.open(url);
-        };
+        });
         table.addRow(row);
     }
 }
 
 table.present();
-
-// todo cache location or ask
-// pass location in from NFC
