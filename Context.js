@@ -9,9 +9,12 @@ const RULES = [
 match: 'Home,Weekday,.*,.*,(Early|Morning),.*',
 shortcuts: ['Take Coat']},
 
-{title: '???',
-match: '.*,.*,Fri,.*,.*,.*',
-shortcuts: ['Take Coat2']},
+{title: 'Home Evening',
+match: 'Home,.*,.*,.*,Evening,.*',
+shortcuts: ['Phone Normal'],
+perspectives: [
+'Evening H',
+'Evening']},
 
 // Default rule
 {title: 'Default',
@@ -63,16 +66,32 @@ async function getShortPostcode() {
     let address = await Location.reverseGeocode(location.latitude, location.longitude);
     let postcode = address[0].postalCode;
     let shortPostcode = postcode.split(' ')[0];
-    console.log(shortPostcode);
     return shortPostcode;
 }
 
-async function getPlace() {
-    let shortPostcode = await getShortPostcode();
-    let place = CONTEXTS[shortPostcode];
-    if (!place) {
-        place = DEFAULT_CONTEXT;
-    }
+function setContext(context) {
+    let fm = FileManager.iCloud();
+    let docs = fm.documentsDirectory();
+    fm.writeString(docs + '.context.txt', context);
+}
+
+async function getContext(useGeo) {
+    let fm = FileManager.iCloud();
+    let docs = fm.documentsDirectory();
+    let filePath = docs + '.context.txt';
+    let place = null;
+    
+    if (useGeo || !fm.fileExists(filePath)) {
+        let shortPostcode = await getShortPostcode();
+        place = CONTEXTS[shortPostcode];
+        if (!place) {
+            place = DEFAULT_CONTEXT;
+        }
+        setContext(place);
+    } else {
+        place = fm.readString(filePath);
+    } 
+    
     return place;
 }
 
@@ -100,17 +119,14 @@ function getRule(key) {
     return rule;
 }
 
-function getShortcutsKey() {
-    //let context = await getPlace();
-    //console.log(context);
-    let context = 'Home';
+async function getShortcutsKey(useGeo) {
+    let context = await getContext(false);
     let time = getTime();
     let key = context + ',' + time;
     return key;
 }
 
-let key = getShortcutsKey();
-console.log(key);
+let key = await getShortcutsKey(false);
 let rule = getRule(key);
 
 let table = new UITable();
@@ -121,18 +137,34 @@ titleRow.dismissOnSelect = false;
 table.addRow(titleRow);
 
 let shortcuts = rule.shortcuts;
-for (let i = 0; i < shortcuts.length; i++) {
-    let shortcut = shortcuts[i];
-    let row = new UITableRow();
-    row.dismissOnSelect = false;
-    let cell = row.addText(shortcut);
-    row.onSelect = (selIndex) => {
-        console.log('run ' + shortcut);
-        let url = new CallbackURL('shortcuts://run-shortcut');
-        url.addParameter('name', shortcut);
-        url.open();
-    };
-    table.addRow(row);
+if (shortcuts && shortcuts.length > 0) {
+    for (let i = 0; i < shortcuts.length; i++) {
+        let shortcut = shortcuts[i];
+        let row = new UITableRow();
+        row.dismissOnSelect = false;
+        let cell = row.addText(shortcut);
+        row.onSelect = (selIndex) => {
+            let url = new CallbackURL('shortcuts://run-shortcut');
+            url.addParameter('name', shortcut);
+            url.open();
+        };
+        table.addRow(row);
+    }
+}
+
+let perspectives = rule.perspectives;
+if (perspectives && perspectives.length > 0) {
+    for (let i = 0; i < perspectives.length; i++) {
+        let perspective = perspectives[i];
+        let row = new UITableRow();
+        row.dismissOnSelect = false;
+        let cell = row.addText(perspective);
+        row.onSelect = (selIndex) => {
+            let url = 'omnifocus:///perspective/' + encodeURI(perspective);
+            Safari.open(url);
+        };
+        table.addRow(row);
+    }
 }
 
 table.present();
