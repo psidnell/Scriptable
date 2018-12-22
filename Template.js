@@ -79,6 +79,22 @@ function extractVariables(text) {
     return variables;
 }
 
+function addAddressField(buffer, field) {
+    buffer += (field && field.length > 0) ? field + '\n' : '';
+    return buffer;
+}
+
+function getAddressStr(address){
+    let postalAddress = address.postalAddress;
+    let result = '';
+    result = addAddressField(result, postalAddress.street);
+    result = addAddressField(result, postalAddress.city);
+    result = addAddressField(result, postalAddress.state);
+    result = addAddressField(result, postalAddress.country);
+    result = addAddressField(result, postalAddress.postalCode);
+    return result;
+}
+
 // Create a map of the variables and their values using predfined
 // rules or asking for values
 async function getVariableValues(variableNames) {
@@ -105,11 +121,10 @@ async function getVariableValues(variableNames) {
             let promise = Location.current();
             console.log('Fetching location, please wait a few seconds...');
             let location = await promise;
-            // returns {"verticalAccuracy":4,"longitude":xxxxx,"latitude":yyyyy,"horizontalAccuracy":10,"altitude":45.898406982421875}
-            // TODO lookup address? https://talk.automators.fm/t/get-address-from-location-object/3332
-            // Generate a maps URL for now
-            let value = 'http://maps.apple.com/?daddr=' + location.latitude + ',' + location.longitude;
-            variables[variableName] = value;
+            console.log('Fetching address...');
+            let address = (await Location.reverseGeocode(location.latitude, location.longitude))[0];     
+            let mapLink = 'http://maps.apple.com/?daddr=' + location.latitude + ',' + location.longitude;
+            variables[variableName] = getAddressStr(address) + '\n' + mapLink;
         } else {
             // Not a predifined variable, ask the user
             let alert = new Alert();
