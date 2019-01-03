@@ -250,45 +250,58 @@ function addRow(table, dateText, eventText, subText, colour) {
     return row;
 }
 
+function getToday() {
+    let today = new Date();
+    today.setUTCHours(0)
+    today.setUTCMinutes(0);
+    today.setUTCSeconds(0);
+    today.setUTCMilliseconds(0);
+    return today;
+}
+
 function handleCalendarEvents(events) {
     let uiTable = new UITable();
     let lastEventDate = null;
     for (let i = 0; i < events.length; i++) {
         let event = events[i];
-        let eventDate = formatNiceDate(event.startDate);
-        let colour = event.calendar.color;
+        let today = getToday();
+        // Prevent active events that started before today from displaying
+        if (event.startDate >= today) {
+            let eventDate = formatNiceDate(event.startDate);
+            let colour = event.calendar.color;
 
-        // Date Header
-        if (eventDate !== lastEventDate) {
-            addTitleRow(uiTable, eventDate);
+            // Date Header
+            if (eventDate !== lastEventDate) {
+                addTitleRow(uiTable, eventDate);
+            }
+
+            // Time and Title
+            let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
+            let time;
+            if (isAllDayAndMultiDay(event)) {
+                time = "Starts";
+            } else if (isAllDayAndSingleDay(event)) {
+                time = "All Day";
+            } else {
+                time = getHHMM(event.startDate);
+            }
+
+            addRow(uiTable, time, event.title, subText, colour).onSelect = (selIndex) => {
+                handleSelectedEvent(event);
+            };
+
+            lastEventDate = eventDate;
         }
-
-        // Time and Title
-        let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
-        let time;
-        if (isAllDayAndMultiDay(event)) {
-            time = "Starts";
-        } else if (isAllDayAndSingleDay(event)) {
-            time = "All Day";
-        } else {
-            time = getHHMM(event.startDate);
-        }
-
-        addRow(uiTable, time, event.title, subText, colour).onSelect = (selIndex) => {
-            handleSelectedEvent(event);
-        };
-
-        lastEventDate = eventDate;
     }
     QuickLook.present(uiTable);
 }
 
 function handleCalendars(calendars) {
-    let now = new Date();
+    let today = getToday();
     let future = new Date();
     future.setDate(future.getDate() + DAYS_TO_SHOW);
     let filteredCalendars = calendars.filter(calendar => !CALENDARS_TO_IGNORE.has(calendar.title));
-    CalendarEvent.between(now, future, filteredCalendars).then(handleCalendarEvents, handleErr);
+    CalendarEvent.between(today, future, filteredCalendars).then(handleCalendarEvents, handleErr);
 }
 
 Calendar.forEvents().then(handleCalendars, handleErr);
