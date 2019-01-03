@@ -216,21 +216,33 @@ function addTitleRow(uiTable, text) {
     return uiTableRow;
 }
 
-// Create a row for an event
-function addRow(table, dateText, eventText, subText, colour) {
-    const rowHeight = 70;
-    let row = new UITableRow();
-
-    // The split seems OK on the narrowest ipad split view
-    
-    let width = 16;
-    let height = rowHeight;
+function getBlockImage(width, height, colour) {
     let c = new DrawContext()
     c.size = new Size(width, height)
     c.setFillColor(colour)
     c.fill(new Rect(0, 0 , width, height));
-    
-    let cell1 = row.addImage(c.getImage());
+    return c.getImage();
+}
+
+function getOutlineBlockImage(width, height, colour) {
+    let c = new DrawContext()
+    c.size = new Size(width, height)
+    c.setFillColor(colour)
+    c.fill(new Rect(0, 0 , width, height/4 - 3));
+    c.fill(new Rect(0, height/4 , width, height/4 - 3));
+    c.fill(new Rect(0, 2 * height/4 , width, height/4 - 3));
+    c.fill(new Rect(0, 3 * height/4 , width, height/4 - 3));
+    return c.getImage();
+}
+
+// Create a row for an event
+function addRow(table, dateText, eventText, subText, colour, allDay) {
+    const rowHeight = 70;
+    let row = new UITableRow();
+
+    // The split seems OK on the narrowest ipad split view
+    let cell1 = row.addImage(
+        allDay ? getOutlineBlockImage(16, rowHeight, colour) : getBlockImage(16, rowHeight, colour));
     cell1.widthWeight = 5;
     cell1.leftAligned();
     
@@ -269,7 +281,8 @@ function handleCalendarEvents(events) {
         if (event.startDate >= today) {
             let eventDate = formatNiceDate(event.startDate);
             let colour = event.calendar.color;
-
+            let allDay = false;
+            
             // Date Header
             if (eventDate !== lastEventDate) {
                 addTitleRow(uiTable, eventDate);
@@ -279,14 +292,17 @@ function handleCalendarEvents(events) {
             let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
             let time;
             if (isAllDayAndMultiDay(event)) {
+                allDay = true;
                 time = "Starts";
             } else if (isAllDayAndSingleDay(event)) {
+                allDay = true;
                 time = "All Day";
             } else {
+                allDay = false;
                 time = getHHMM(event.startDate);
             }
 
-            addRow(uiTable, time, event.title, subText, colour).onSelect = (selIndex) => {
+            addRow(uiTable, time, event.title, subText, colour, allDay).onSelect = (selIndex) => {
                 handleSelectedEvent(event);
             };
 
