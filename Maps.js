@@ -53,7 +53,7 @@ function processAppleUrl(appleMapsUrl, dict) {
     return {
         ll: latLong,
         address: address,
-        appleMapsUrl: appleMapsUrl,
+        appleMapsUrl: 'https://maps.apple.com/?ll=' + latLong,
         googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + latLong,
         wazeUrl: 'https://waze.com/ul?ll=' + latLong
     };
