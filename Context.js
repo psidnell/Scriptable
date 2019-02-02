@@ -18,6 +18,7 @@ perspectives: [
 'Review',
 'Morning H'
 ]},
+
 //==================
 {title: 'Home Morning',
 match: 'Home,Weekday,.*,.*,Morning,.*',
@@ -29,6 +30,7 @@ perspectives: [
 'Morning H',
 'Today H'
 ]},
+
 //==================
 {title: 'Home Evening',
 match: 'Home,.*,.*,.*,Evening,.*',
@@ -39,6 +41,7 @@ shortcuts: [
 perspectives: [
 'Evening H',
 'Evening']},
+
 //==================
 {title: 'Home Late',
 match: 'Home,.*,.*,.*,(Late|Night),.*',
@@ -46,10 +49,20 @@ shortcuts: [
 'Phone In Bed',
 'Phone At Night',
 'Overcast Play'
+]},
+
+//==================
+{title: 'Home Weekend',
+match: 'Home,Weekend,.*,.*,.*,.*',
+shortcuts: [
+'Phone Normal',
+'Overcast Play'
 ],
 perspectives: [
-'Evening H',
-'Evening']},
+'Today H',
+'Out',
+'Out Today']},
+
 //==================
 {title: 'Out',
 match: 'Out,.*,.*,.*,.*,.*',
@@ -61,6 +74,7 @@ shortcuts: [
 perspectives: [
 'Out',
 'Out Today']},
+
 //==================
 {title: 'Driving',
 match: 'Driving,.*,.*,.*,.*,.*',
@@ -72,6 +86,7 @@ shortcuts: [
 perspectives: [
 'Out',
 'Out Today']},
+
 //==================
 // Default rule
 {title: 'Default',
@@ -81,6 +96,7 @@ shortcuts: [
 'Phone In Bed',
 'Phone Normal'
 ]}
+
 ];
     
 const GEO_CONTEXTS = {
