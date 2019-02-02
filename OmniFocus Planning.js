@@ -8,7 +8,7 @@ const MENU = [
     {name: 'Due Soon', perspective: 'Due Soon'},
     {name: 'Forecast', builtIn: 'forecast'},
     {name: 'Inbox', builtIn: 'inbox'},
-    {name: 'Morning', perspective: 'Morning'},
+    //{name: 'Morning', perspective: 'Morning'},
     {name: 'Morning H', perspective: 'Morning H'},
     {name: 'Refiling', perspective: 'Refiling'},
     {name: 'Review', perspective: 'Review'},
@@ -17,6 +17,7 @@ const MENU = [
     {name: 'Today', perspective: 'Today'},
     {name: 'Up Next', perspective: 'Up Next'},
     {name: 'Waiting', perspective: 'Waiting'},
+    {name: 'Triggers', perspective: 'Triggers'},
     
     {name: 'Templates', title: true},
     {name: 'Daily Planning', task: 'bYC23KS953g'},

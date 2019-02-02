@@ -21,11 +21,6 @@
 // V1.0.0
 // https://github.com/psidnell/Scriptable
 
-/*
-TODO
-- HERE not looking up address (possible?), creating maps URL for now
-*/
-
 // Whole bunch of little date formatting functions
 const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -49,9 +44,10 @@ function processLine(line, variables) {
     let variableNames = Object.keys(variables);
     for (let i = 0; i < variableNames.length; i++) {
         let variableName = variableNames[i];
-        let variable = '${' + variableName + '}';
+        let variable = '${' + variableName + '}'
         let value = variables[variableName];
-        line = line.replace(variable, value);
+        let regexp = new RegExp('\\$\\{' + variableName + '\\}', 'g')
+        line = line.replace(regexp, value);
     }
     return line;
 }
