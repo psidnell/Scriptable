@@ -68,7 +68,7 @@ function formatOFDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(
 // Tidy up a location extracted from the calendar
 function locationToSingleLine(locationString) {
     // Put the location on a single line
-    return locationString.split('\n').join(', ');
+    return locationString ? locationString.split('\n').join(', ') : '';
 }
 
 // Look up any alternate calendar name
