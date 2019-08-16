@@ -26,7 +26,7 @@
 DAYS_TO_SHOW = 150;
 
 // The default project path for creating OmniFocus events for example this is /Home/Calendar/Calendar
-DEFAULT_PROJECT = ['Home', 'Calendar', 'Calendar'].join(' : ');
+DEFAULT_PROJECT = ['Home', 'Calendar'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events in different projects.
 // for example this maps the Calendar called "Calendar" onto the project "Work/Calendar".

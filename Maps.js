@@ -48,12 +48,14 @@ function processAppleUrl(appleMapsUrl, dict) {
         address = lines.join('\n');
     }
     
+    let name = address.length > 0 ? address.split('\n')[0]: 'Pin';
+    
     let latLong = dict['ll'];
 
     return {
         ll: latLong,
         address: address,
-        appleMapsUrl: 'https://maps.apple.com/?ll=' + latLong,
+        appleMapsUrl: 'https://maps.apple.com/?ll=' + latLong + '&q=' + encodeURIComponent(name),
         googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + latLong,
         wazeUrl: 'https://waze.com/ul?ll=' + latLong
     };
@@ -151,7 +153,7 @@ if (args.urls && args.urls.length > 0) {
             let location = Location.current();
             location.then((locData) => {
                 let ll = locData.latitude + ',' + locData.longitude;
-                let url = 'https://maps.apple.com/?ll=' + ll + '&t=m';
+                let url = 'https://maps.apple.com/?sll=' + ll + '&t=m';
                 let dict = decodeUrlParams(url);
                 info = processAppleUrl(url, dict);
                 display(info);
