@@ -278,37 +278,34 @@ function handleCalendarEvents(events) {
     for (let i = 0; i < events.length; i++) {
         let event = events[i];
         let today = getToday();
-        // Prevent active events that started before today from displaying
-        if (event.startDate >= today) {
-            let eventDate = formatNiceDate(event.startDate);
-            let colour = event.calendar.color;
-            let allDay = false;
+        let eventDate = formatNiceDate(event.startDate);
+        let colour = event.calendar.color;
+        let allDay = false;
             
-            // Date Header
-            if (eventDate !== lastEventDate) {
-                addTitleRow(uiTable, eventDate);
-            }
-
-            // Time and Title
-            let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
-            let time;
-            if (isAllDayAndMultiDay(event)) {
-                allDay = true;
-                time = "Starts";
-            } else if (isAllDayAndSingleDay(event)) {
-                allDay = true;
-                time = "All Day";
-            } else {
-                allDay = false;
-                time = getHHMM(event.startDate);
-            }
-
-            addRow(uiTable, time, event.title, subText, colour, allDay).onSelect = (selIndex) => {
-                handleSelectedEvent(event);
-            };
-
-            lastEventDate = eventDate;
+        // Date Header
+        if (eventDate !== lastEventDate) {
+            addTitleRow(uiTable, eventDate);
         }
+
+        // Time and Title
+        let subText = ['(' + getAlternateCalendarName(event.calendar.title) + ')', locationToSingleLine(event.location)].join(' ').trim();
+        let time;
+        if (isAllDayAndMultiDay(event)) {
+            allDay = true;
+            time = "Starts";
+        } else if (isAllDayAndSingleDay(event)) {
+            allDay = true;
+            time = "All Day";
+        } else {
+            allDay = false;
+            time = getHHMM(event.startDate);
+        }
+
+        addRow(uiTable, time, event.title, subText, colour, allDay).onSelect = (selIndex) => {
+            handleSelectedEvent(event);
+        };
+
+        lastEventDate = eventDate;
     }
     QuickLook.present(uiTable);
 }
