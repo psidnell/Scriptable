@@ -105,7 +105,7 @@ async function createEntry(data) {
     url.addParameter('project', data.project);
     url.addParameter('due', data.due);
     url.addParameter('defer', data.defer);
-    url.addParameter('flag', 'true');
+    url.addParameter('flag', 'false');
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false');
     url.addParameter('autosave', 'true');
