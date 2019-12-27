@@ -25,14 +25,22 @@
 // Number of days to show in the picker
 DAYS_TO_SHOW = 150;
 
-// The default project path for creating OmniFocus events for example this is /Home/Calendar/Calendar
-DEFAULT_PROJECT = ['Home', 'Calendar'].join(' : ');
+// The default project path for creating OmniFocus events
+DEFAULT_PROJECT = ['Calendar'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events in different projects.
-// for example this maps the Calendar called "Calendar" onto the project "Work/Calendar".
 const PROJECT_MAP = {
-    'Calendar': ['Work','Calendar'].join(' : '),
-    'Work': ['Work','Calendar'].join(' : ')
+    'Calendar': ['Calendar'].join(' : '),
+    'Work': ['Calendar'].join(' : ')
+};
+
+// The default tag path for creating OmniFocus events
+DEFAULT_TAG = ['🏠', '🟢 ACTION', 'CALENDAR'].join(' : ');
+
+// Here you can create mappings so that different calendars create Omnifocus events with different tags.
+const TAG_MAP = {
+    'Calendar': ['🏢','💚 ACTION', 'CALENDAR'].join(' : '),
+    'Work': ['🏢','💚 ACTION', 'CALENDAR'].join(' : ')
 };
 
 // Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
@@ -83,6 +91,12 @@ function getProjectFromCalendar(realCalendarName) {
     return project != null ? project : DEFAULT_PROJECT;
 }
 
+// Look up the tag to be used for the calendar name
+function getTagFromCalendar(realCalendarName) {
+    let tag = TAG_MAP[realCalendarName];
+    return tag != null ? tag : DEFAULT_TAG;
+}
+
 // Extract the attendee names from the event
 function extractAttendees(attendeeObjects) {
     let attendees = [];
@@ -103,6 +117,7 @@ async function createEntry(data) {
     let url = new CallbackURL('omnifocus:///add');
     url.addParameter('name', data.name);
     url.addParameter('project', data.project);
+    url.addParameter('tags', data.tag);
     url.addParameter('due', data.due);
     url.addParameter('defer', data.defer);
     url.addParameter('flag', 'false');
@@ -143,6 +158,7 @@ async function handleSelectedEvent(event) {
     let altCalendarName = getAlternateCalendarName(event.calendar.title);
     let title = event.title;
     let projectForCalendar = getProjectFromCalendar(event.calendar.title);
+    let tagForCalendar = getTagFromCalendar(event.calendar.title);
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
     let location = event.location ? event.location : '';
@@ -166,6 +182,7 @@ async function handleSelectedEvent(event) {
         await createEntry({
             name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
+            tag: tagForCalendar,
             due: start,
             defer: start,
             note: note
@@ -174,6 +191,7 @@ async function handleSelectedEvent(event) {
         await createEntry({
             name: title + ' ends ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
+            tag: tagForCalendar,
             due: end,
             defer: end,
             note: note
@@ -185,6 +203,7 @@ async function handleSelectedEvent(event) {
         await createEntry({
             name: title + ' ' + formatNiceDate(event.startDate),
             project: projectForCalendar,
+            tag: tagForCalendar,
             due: due,
             defer: defer,
             note: note
@@ -196,6 +215,7 @@ async function handleSelectedEvent(event) {
         await createEntry({
             name: title + ' ' + formatNiceDateTime(event.startDate),
             project: projectForCalendar,
+            tag: tagForCalendar,
             due: due,
             defer: defer,
             note: note
