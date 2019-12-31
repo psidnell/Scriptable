@@ -35,12 +35,12 @@ const PROJECT_MAP = {
 };
 
 // The default tag path for creating OmniFocus events
-DEFAULT_TAG = ['🏠', '🟢 ACTION', 'CALENDAR'].join(' : ');
+DEFAULT_TAG = ['🏠', '🟢 ACTION', 'OVERVIEW'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events with different tags.
 const TAG_MAP = {
-    'Calendar': ['🏢','💚 ACTION', 'CALENDAR'].join(' : '),
-    'Work': ['🏢','💚 ACTION', 'CALENDAR'].join(' : ')
+    'Calendar': ['🏢','💚 ACTION', 'OVERVIEW'].join(' : '),
+    'Work': ['🏢','💚 ACTION', 'OVERVIEW'].join(' : ')
 };
 
 // Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
@@ -120,7 +120,7 @@ async function createEntry(data) {
     url.addParameter('tags', data.tag);
     url.addParameter('due', data.due);
     url.addParameter('defer', data.defer);
-    url.addParameter('flag', 'false');
+    url.addParameter('flag', 'true');
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false');
     url.addParameter('autosave', 'true');
