@@ -26,21 +26,21 @@
 DAYS_TO_SHOW = 150;
 
 // The default project path for creating OmniFocus events
-DEFAULT_PROJECT = ['Calendar'].join(' : ');
+DEFAULT_PROJECT = ['Home', 'Lists', 'Calendar'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events in different projects.
 const PROJECT_MAP = {
-    'Calendar': ['Calendar'].join(' : '),
-    'Work': ['Calendar'].join(' : ')
+    'Calendar': ['Work', 'Lists', 'Calendar'].join(' : '),
+    'Work': ['Work', 'Lists', 'Calendar'].join(' : ')
 };
 
 // The default tag path for creating OmniFocus events
-DEFAULT_TAG = ['🏠', '🟢 ACTION', 'OVERVIEW'].join(' : ');
+DEFAULT_TAG = ['🏠', 'TODAY'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events with different tags.
 const TAG_MAP = {
-    'Calendar': ['🏢','💚 ACTION', 'OVERVIEW'].join(' : '),
-    'Work': ['🏢','💚 ACTION', 'OVERVIEW'].join(' : ')
+    'Calendar': ['🏢', 'TODAY'].join(' : '),
+    'Work': ['🏢','TODAY'].join(' : ')
 };
 
 // Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
@@ -120,7 +120,7 @@ async function createEntry(data) {
     url.addParameter('tags', data.tag);
     url.addParameter('due', data.due);
     url.addParameter('defer', data.defer);
-    url.addParameter('flag', 'true');
+    url.addParameter('flag', 'false');
     url.addParameter('note', data.note);
     url.addParameter('reveal-new-item', 'false');
     url.addParameter('autosave', 'true');
