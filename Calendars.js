@@ -35,12 +35,12 @@ const PROJECT_MAP = {
 };
 
 // The default tag path for creating OmniFocus events
-DEFAULT_TAG = ['🏠', '⭐ TODAY'].join(' : ');
+DEFAULT_TAG = ['⭐ TODAY'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events with different tags.
 const TAG_MAP = {
-    'Calendar': ['🏢', '⭐ TODAY'].join(' : '),
-    'Work': ['🏢', '⭐ TODAY'].join(' : ')
+    'Calendar': ['⭐ TODAY'].join(' : '),
+    'Work': ['⭐ TODAY'].join(' : ')
 };
 
 // Some calendars have annoying names, for example my Work exchange calendar is called "Calendar".
