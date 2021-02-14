@@ -45,7 +45,7 @@ function processAppleUrl(appleMapsUrl, dict) {
         for (let i = 0; i < lines.length; i++) {
             lines[i] = lines[i].trim();
         }
-        address = lines.join('\n');
+        address = lines.join(',\n');
     }
     
     let name = address.length > 0 ? address.split('\n')[0]: 'Pin';
@@ -95,9 +95,9 @@ function display(info) {
     
     let pasteData = [
         info.address,
-        info.appleMapsUrl,
-        info.googleMapsUrl,
-        info.wazeUrl
+        '[Apple Maps](' + info.appleMapsUrl + ')',
+        '[Google Maps](' + info.googleMapsUrl + ')',
+        '[Waze](' + info.wazeUrl + ')'
     ];
     
     addRow(uiTable, "Location Details Extracted", true);
