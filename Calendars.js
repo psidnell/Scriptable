@@ -216,7 +216,7 @@ async function handleSelectedEvent(event) {
             note: note
         });
     } else {
-        // Simple event with time
+        // Simple event with time - possibly multi-day, but just set due to start
         let due = formatOFDateTime(event.startDate);
         await createEntry({
             name: title + ' ' + formatNiceDateTime(event.startDate),
