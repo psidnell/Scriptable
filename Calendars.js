@@ -72,7 +72,7 @@ function formatNiceDate(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + get
 
 // Date formatting for OmniFocus parsing
 function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
-function formatOFDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
+function formatOFDateStartOfDay(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
 function formatOFDateEndOfDay(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' 23:59';}
 
 // Tidy up a location extracted from the calendar
@@ -143,16 +143,16 @@ async function createEntry(data) {
 
 // True if the event is a multi-day all day event
 function isAllDayAndMultiDay(event) {
-    let start = formatOFDate(event.startDate);
-    let end = formatOFDate(event.endDate);
+    let start = formatOFDateStartOfDay(event.startDate);
+    let end = formatOFDateStartOfDay(event.endDate);
     let singleDay = start === end;
     return event.isAllDay && !singleDay;
 }
 
 // True if the event is a multi-day single day event
 function isAllDayAndSingleDay(event) {
-    let start = formatOFDate(event.startDate);
-    let end = formatOFDate(event.endDate);
+    let start = formatOFDateStartOfDay(event.startDate);
+    let end = formatOFDateStartOfDay(event.endDate);
     let singleDay = start === end;
     return event.isAllDay && singleDay;
 }
@@ -163,11 +163,15 @@ async function handleSelectedEvent(event) {
     let title = event.title;
     let projectForCalendar = getProjectFromCalendar(event.calendar.title);
     let tagForCalendar = getTagFromCalendar(event.calendar.title);
-    let start = formatOFDate(event.startDate);
-    let end = formatOFDate(event.endDate);
-    let endMidnight = formatOFDateEndOfDay(event.endDate);
     let location = event.location ? event.location : '';
     let attendees = event.attendees ? event.attendees : [];
+
+    let startMorning = formatOFDateStartOfDay(event.startDate);
+    let startExactTime = formatOFDateTime(event.startDate);
+    let startMidnight = formatOFDateEndOfDay(event.startDate);
+
+    let endMorning = formatOFDateStartOfDay(event.endDate);
+    let endMidnight = formatOFDateEndOfDay(event.endDate);
 
     // Create note
     let note = 'Calendar: ' + altCalendarName + '\n\n';
@@ -188,8 +192,8 @@ async function handleSelectedEvent(event) {
             name: title + ' starts ' + formatNiceDate(event.startDate) + ' - ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
             tag: tagForCalendar,
-            due: start,
-            defer: start,
+            defer: startMorning,
+            due: startMidnight,
             note: note
         });
         // Multi day event - end day
@@ -197,8 +201,8 @@ async function handleSelectedEvent(event) {
             name: title + ' ends ' + formatNiceDate(event.endDate),
             project: projectForCalendar,
             tag: tagForCalendar,
-            due: end,
-            defer: endMidnight,
+            defer: endMorning,
+            due: endMidnight,
             note: note
         });
     } else if (isAllDayAndSingleDay(event)) {
@@ -207,8 +211,8 @@ async function handleSelectedEvent(event) {
             name: title + ' ' + formatNiceDate(event.startDate),
             project: projectForCalendar,
             tag: tagForCalendar,
+            defer: startMorning,
             due: endMidnight,
-            defer: start,
             note: note
         });
     } else {
@@ -218,8 +222,8 @@ async function handleSelectedEvent(event) {
             name: title + ' ' + formatNiceDateTime(event.startDate),
             project: projectForCalendar,
             tag: tagForCalendar,
-            due: end,
-            defer: defer,
+            defer: startMorning,
+            due: startExactTime,
             note: note
         });
     }
