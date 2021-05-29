@@ -73,6 +73,7 @@ function formatNiceDate(d) { return getDayName(d) + ' ' + getDate(d) + ' ' + get
 // Date formatting for OmniFocus parsing
 function formatOFDateTime(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' ' + getHHMM(d);}
 function formatOFDate(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d);}
+function formatOFDateEndOfDay(d) {return getYear(d) + '-' + getMonth(d) + '-' + getDate(d) + ' 23:59';}
 
 // Tidy up a location extracted from the calendar
 function locationToSingleLine(locationString) {
@@ -164,6 +165,7 @@ async function handleSelectedEvent(event) {
     let tagForCalendar = getTagFromCalendar(event.calendar.title);
     let start = formatOFDate(event.startDate);
     let end = formatOFDate(event.endDate);
+    let endMidnight = formatOFDateEndOfDay(event.endDate);
     let location = event.location ? event.location : '';
     let attendees = event.attendees ? event.attendees : [];
 
@@ -196,30 +198,27 @@ async function handleSelectedEvent(event) {
             project: projectForCalendar,
             tag: tagForCalendar,
             due: end,
-            defer: end,
+            defer: endMidnight,
             note: note
         });
     } else if (isAllDayAndSingleDay(event)) {
         // All day event for a single day
-        let due = formatOFDate(event.startDate);
-        let defer = formatOFDate(event.startDate);
         await createEntry({
             name: title + ' ' + formatNiceDate(event.startDate),
             project: projectForCalendar,
             tag: tagForCalendar,
-            due: due,
-            defer: defer,
+            due: endMidnight,
+            defer: start,
             note: note
         });
     } else {
         // Simple event with time
         let due = formatOFDateTime(event.startDate);
-        let defer = formatOFDate(event.startDate);
         await createEntry({
             name: title + ' ' + formatNiceDateTime(event.startDate),
             project: projectForCalendar,
             tag: tagForCalendar,
-            due: due,
+            due: end,
             defer: defer,
             note: note
         });
