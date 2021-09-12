@@ -26,16 +26,16 @@
 DAYS_TO_SHOW = 150;
 
 // The default project path for creating OmniFocus events
-DEFAULT_PROJECT = ['[Calendar]'].join(' : ');
+DEFAULT_PROJECT = ['Miscellaneous'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events in different projects.
 const PROJECT_MAP = {
-    'Calendar': ['[Calendar]'].join(' : '),
-    'Work': ['[Calendar]'].join(' : ')
+    'Calendar': ['Miscellaneous'].join(' : '),
+    'Work': ['Miscellaneous'].join(' : ')
 };
 
 // The default tag path for creating OmniFocus events, can be null
-DEFAULT_TAG = null; //['⭐ TODAY'].join(' : ');
+DEFAULT_TAG = ['⭐ TODAY'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events with different tags.
 // Can be empty
