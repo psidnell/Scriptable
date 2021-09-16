@@ -35,7 +35,7 @@ const PROJECT_MAP = {
 };
 
 // The default tag path for creating OmniFocus events, can be null
-DEFAULT_TAG = ['⭐ TODAY'].join(' : ');
+DEFAULT_TAG = ['⭐'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events with different tags.
 // Can be empty
