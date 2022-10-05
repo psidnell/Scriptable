@@ -26,12 +26,12 @@
 DAYS_TO_SHOW = 150;
 
 // The default project path for creating OmniFocus events
-DEFAULT_PROJECT = ['Home', '[Calendar]'].join(' : ');
+DEFAULT_PROJECT = ['Home', 'Calendar'].join(' : ');
 
 // Here you can create mappings so that different calendars create Omnifocus events in different projects.
 const PROJECT_MAP = {
-    'Calendar': ['Home', '[Calendar]'].join(' : '),
-    'Work': ['Work', '[Calendar]'].join(' : ')
+    'Calendar': ['Home', 'Calendar'].join(' : '),
+    'Work': ['Work', 'Calendar'].join(' : ')
 };
 
 // The default tag path for creating OmniFocus events, can be null
